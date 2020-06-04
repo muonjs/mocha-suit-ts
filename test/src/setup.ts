@@ -38,17 +38,6 @@ method_names.renameMethod({
     xitMethod: "test_xit"
 });
 
-global.NormalizeTests = function(){
-    if (!global.hasOwnProperty("before") && !global.hasOwnProperty("beforeAll")) {
-        throw Error("There is no proper setup methods. Probably unknown Test framework. Exiting.")
-    }
-
-    if (!global.hasOwnProperty("before") && global.hasOwnProperty("beforeAll")) {
-        global.before = global.beforeAll;
-        global.after = global.afterAll;
-    }
-};
-
 testMethods.forEach(function(method){
     substitutedMethods[method] = global["test_"+method] = generateMochaMethod("test_"+method);
 });
