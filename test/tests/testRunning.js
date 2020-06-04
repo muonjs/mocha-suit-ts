@@ -1,9 +1,11 @@
 'use strict';
 
+global.NormalizeTests();
+
 var MSG = "Test running.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     var createSuit = function(){
         before(function() {

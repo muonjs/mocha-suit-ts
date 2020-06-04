@@ -4,7 +4,8 @@
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require test/build/setup.js --recursive test/build/tests"
+    "test": "mocha --require test/build/setup.js --recursive test/build/tests",
+    "jstest": "mocha --require test/setup.js --recursive test/tests"
   },
   "author": "",
   "license": "MIT",
@@ -16,8 +17,11 @@
   "devDependencies": {
     "@types/expect.js": "^0.3.29",
     "@types/mocha": "^7.0.2",
+    "bluebird": "^3.7.2",
     "expect.js": "^0.3.1",
     "mocha": "^7.1.2",
-    "mocha-suit-ts": "file:./"
+    "mocha-suit-ts": "file:./",
+    "should": "^13.2.3",
+    "sinon": "^9.0.2"
   }
 }

@@ -2,9 +2,10 @@
 
 require("should");
 global.should.config.checkProtoEql = false;
+global.expect = require("expect.js");
+global.sinon = require("sinon");
 
-
-var method_names = require("../lib/method_names");
+var method_names = require("mocha-suit/lib/method_names");
 
 var _ = require("underscore");
 
@@ -37,6 +38,17 @@ method_names.renameMethod({
     itMethod: "test_it",
     xitMethod: "test_xit"
 });
+
+global.NormalizeTests = function(){
+    if (!global.hasOwnProperty("before") && !global.hasOwnProperty("beforeAll")) {
+        throw Error("There is no proper setup methods. Probably unknown Test framework. Exiting.")
+    }
+
+    if (!global.hasOwnProperty("before") && global.hasOwnProperty("beforeAll")) {
+        global.before = global.beforeAll;
+        global.after = global.afterAll;
+    }
+};
 
 testMethods.forEach(function(method){
     substitutedMethods[method] = global["test_"+method] = generateMochaMethod("test_"+method);

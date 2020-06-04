@@ -1,9 +1,11 @@
 'use strict;'
 
+global.NormalizeTests();
+
 var MSG = "Check mocha methods call.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     describe("Describe.",function(){
         describe("Base Suit generation.",function(){

@@ -1,9 +1,11 @@
 'use strict';
 
+global.NormalizeTests();
+
 var MSG = "Base system test.";
 
 describe(MSG,function(){
-    var mod = require('../../app');
+    var mod = require("mocha-suit");
     var run = function(){
         it("Suit should have all base factory methods.",function(){
             var self = this;

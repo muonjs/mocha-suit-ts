@@ -1,9 +1,11 @@
 'use strict';
 
+global.NormalizeTests();
+
 var MSG = "Suit chaining.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     var setMethods = function(s) {
         s.before(function(){});

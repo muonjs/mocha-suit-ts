@@ -1,9 +1,11 @@
 'use strict';
 
+global.NormalizeTests();
+
 var MSG = "Composing Suit.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     ["before","beforeEach","beforeAll","after","afterAll","afterEach"].forEach(function(method){
         describe(capitalize(method)+".",function(){

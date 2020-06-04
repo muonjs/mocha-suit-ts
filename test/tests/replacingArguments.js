@@ -1,11 +1,13 @@
 'use strict';
 
+global.NormalizeTests();
+
 var DELAY = 10;
 
 var MSG = "Extending suit arguments.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     ["before","after","beforeAll","afterAll","it","that"].forEach(function(method) {
         describe("For '"+method+"' method",function(){

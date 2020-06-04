@@ -1,12 +1,14 @@
 'use strict';
 
+global.NormalizeTests();
+
 var DELAY = 10;
 var Promise = require("bluebird");
 
 var MSG = "Asynchronous methods.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     describe("With 'done' argument.",function(){
         ["before","after","beforeEach","afterEach","beforeAll","afterAll","it"].forEach(function(method){

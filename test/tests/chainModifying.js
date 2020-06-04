@@ -1,9 +1,11 @@
 'use strict';
 
+NormalizeTests();
+
 var MSG = "Modifying suit chain with set/reset methods.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     describe("Normal chain execution check.",function(){
         before(function() {

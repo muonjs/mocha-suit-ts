@@ -1,9 +1,11 @@
 'use strict';
 
+global.NormalizeTests();
+
 var MSG = "Context generation.";
 
 describe(MSG,function(){
-    var mod = require("../../app");
+    var mod = require("mocha-suit");
 
     describe("With generator call.",function(){
         before(function(){
