@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": false,
+    "noImplicitThis": true,
+    "inlineSourceMap": true,
+    "lib": ["es2015"],
+    "module": "commonjs",
+    "target": "es5",
+    "experimentalDecorators": true
+  },
+  "include":[
+    "./src/**/*"
+  ]
+}
