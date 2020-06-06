@@ -1,5 +1,4 @@
 {
-  "name": "mocha-suit-ts",
   "version": "0.0.1",
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
@@ -11,7 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^14.0.1",
+    "awesome-typescript-loader": "^5.2.1",
     "mocha-suit": "^0.7.1",
+    "source-map-loader": "^1.0.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
@@ -23,5 +24,9 @@
     "mocha-suit-ts": "file:./",
     "should": "^13.2.3",
     "sinon": "^9.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/muonjs/mocha-suit-ts.git"
   }
 }
