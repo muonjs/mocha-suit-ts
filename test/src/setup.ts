@@ -1,17 +1,14 @@
 'use strict';
 
-require("should");
-global.should.config.checkProtoEql = false;
-global.expect = require("expect.js");
-global.sinon = require("sinon");
+var should = require("should");
 
-var method_names = require("mocha-suit/lib/method_names");
+should.config.checkProtoEql = false;
 
-var _ = require("underscore");
+export var method_names = require("mocha-suit/lib/method_names");
 
-var generateMochaMethod = require("./spy");
+export var generateMochaMethod = require("./spy");
 
-var testMethods = [
+let testMethods = [
     "describe",
     "xdescribe",
     "before",
@@ -24,7 +21,7 @@ var testMethods = [
     "afterAll"
 ];
 
-var substitutedMethods = {};
+var substitutedMethods:any = {};
 
 method_names.renameMethod({
     describeMethod: "test_describe",
@@ -39,34 +36,35 @@ method_names.renameMethod({
     xitMethod: "test_xit"
 });
 
-global.NormalizeTests = function(){
-    if (!global.hasOwnProperty("before") && !global.hasOwnProperty("beforeAll")) {
+export const NormalizeTests = function(method: any){
+    if (!method.hasOwnProperty("before") && !method.hasOwnProperty("beforeAll")) {
         throw Error("There is no proper setup methods. Probably unknown Test framework. Exiting.")
     }
 
-    if (!global.hasOwnProperty("before") && global.hasOwnProperty("beforeAll")) {
-        global.before = global.beforeAll;
-        global.after = global.afterAll;
+    if (!method.hasOwnProperty("before") && method.hasOwnProperty("beforeAll")) {
+        method.before = method.beforeAll;
+        method.after = method.afterAll;
     }
 };
 
 testMethods.forEach(function(method){
-    substitutedMethods[method] = global["test_"+method] = generateMochaMethod("test_"+method);
+    let test_Method = generateMochaMethod("test_"+method);
+    substitutedMethods[method] = generateMochaMethod("test_"+method);
 });
 
-global.ResetSpyMethods = function(){
+export const ResetSpyMethods = function(){
     testMethods.forEach(function(method){
         substitutedMethods[method].reset();
     });
 };
 
-global.RunSpyMethods = function(){
+export const RunSpyMethods = function(){
     testMethods.forEach(function(method){
         substitutedMethods[method].run();
     });
 };
 
-global.capitalize = function(str) {
+export const capitalize = function(str: string) {
     var temp = str.split("");
     var firstLetter = temp.shift();
     temp.unshift(firstLetter.toUpperCase());

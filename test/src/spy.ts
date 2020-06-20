@@ -2,13 +2,13 @@
 
 var fRegCheck = /^function\s*\S*?\s*\(\S+?\)/;
 
-module.exports = function(name){
-    var args = [];
-    var ret = [];
-    var called = [];
-    var done = [];
+module.exports = function(name: string){
+    var args: any[] = [];
+    var ret: any[] = [];
+    var called: any[] = [];
+    var done: any[] = [];
 
-    var method = function(){
+    var method: any = function(){
         args.push([].slice.call(arguments));
     };
 
@@ -19,7 +19,7 @@ module.exports = function(name){
                 if (called[i]) {
                     return;
                 }
-                args[i].forEach(function(arg){
+                args[i].forEach(function(arg: any){
                     // console.log(1,(arg || "").toString(),);
                     if (arg instanceof Function) {
                         if (fRegCheck.test(arg.toString())) {
@@ -49,17 +49,17 @@ module.exports = function(name){
         return args.length;
     };
 
-    method.isCalled = function(i){
+    method.isCalled = function(i: number){
         return called[i] === true;
     };
 
-    method.calledWith = function(i){
+    method.calledWith = function(i: number){
         return args[i];
     };
-    method.returned = function(i){
+    method.returned = function(i: number){
         return ret[i];
     };
-    method.doneMethod = function(i){
+    method.doneMethod = function(i: number){
         return done[i];
     };
 

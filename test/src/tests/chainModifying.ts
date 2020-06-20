@@ -1,6 +1,7 @@
 'use strict';
 
-NormalizeTests();
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
 
 var MSG = "Modifying suit chain with set/reset methods.";
 

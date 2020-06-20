@@ -1,6 +1,7 @@
 'use strict';
 
-global.NormalizeTests();
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
 
 var MSG = "Context generation.";
 

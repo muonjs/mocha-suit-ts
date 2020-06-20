@@ -1,9 +1,12 @@
 'use strict';
 
-global.NormalizeTests();
+import { capitalize } from '../setup';
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { method_names } from '../setup';
 
+var Promise: PromiseConstructor = require("bluebird");
 var DELAY = 10;
-var Promise = require("bluebird");
 
 var MSG = "Asynchronous methods.";
 
@@ -18,7 +21,7 @@ describe(MSG,function(){
                     this.suit = mod();
                     this.callOrder = [];
 
-                    var call1 = function call1(done){
+                    var call1 = function call1(done: any){
                         setTimeout(function(){
                             self.callOrder.push(1);
                             done();
@@ -52,7 +55,8 @@ describe(MSG,function(){
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    var doneMethod = global["test_"+method].doneMethod(0);
+                    // let testMethodName = ["test_"+method];
+                    var doneMethod = method_names["test_"+method].doneMethod(0);
                     expect(doneMethod).to.be.ok();
                     expect(doneMethod.called).to.be.ok();
                 });
@@ -89,7 +93,9 @@ describe(MSG,function(){
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    var returned = global["test_"+method].returned(0);
+                    // let test_Method = generateMochaMethod("test_"+method);
+                    // let testMethodName = ["test_"+method];
+                    var returned = method_names["test_"+method].returned(0);
                     expect(returned).to.be.ok();
                     expect(returned.then).to.be.ok();
                     returned.then.should.be.Function();

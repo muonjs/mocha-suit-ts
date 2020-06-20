@@ -1,6 +1,7 @@
 'use strict';
 
-global.NormalizeTests();
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
 
 var DELAY = 10;
 
@@ -15,7 +16,7 @@ describe(MSG,function(){
                 this.Suit = mod();
                 this.AnotherSuit = mod();
 
-                var result = this.result = [];
+                var result: any[] = this.result = [];
 
                 var methodArguments = [function() {
                     result.push({
@@ -25,7 +26,8 @@ describe(MSG,function(){
                 }];
 
                 if (["it","that"].indexOf(method) !== -1) {
-                    methodArguments.unshift("");
+                    var description: any = "";
+                    methodArguments.unshift(description);
                 }
 
                 this.Suit[method].apply(this.Suit,methodArguments);
@@ -65,9 +67,9 @@ describe(MSG,function(){
             this.Suit = mod();
             this.AnotherSuit = mod();
 
-            var beforeResult = this.beforeResult = [];
-            var afterResult = this.afterResult = [];
-            var itResult = this.itResult = [];
+            var beforeResult: any[] = this.beforeResult = [];
+            var afterResult: any[] = this.afterResult = [];
+            var itResult: any[] = this.itResult = [];
 
             this.Suit.before(function() {
                 beforeResult.push({
@@ -136,9 +138,9 @@ describe(MSG,function(){
             this.Suit = mod();
             this.AnotherSuit = mod();
 
-            var beforeResult = this.beforeResult = [];
+            var beforeResult: any[] = this.beforeResult = [];
 
-            this.Suit.before(function(done) {
+            this.Suit.before(function(done: any) {
                 beforeResult.push({
                     argument1: this.suit.argument1,
                     argument2: this.suit.argument2

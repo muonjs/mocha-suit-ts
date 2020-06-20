@@ -1,7 +1,5 @@
 'use strict';
 
-global.NormalizeTests();
-
 var MSG = "Base system test.";
 
 describe(MSG,function(){

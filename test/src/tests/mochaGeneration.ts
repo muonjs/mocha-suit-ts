@@ -1,6 +1,11 @@
 'use strict;'
 
-global.NormalizeTests();
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { capitalize } from '../setup';
+import { method_names } from '../setup';
+
+import sinon = require("sinon");
 
 var MSG = "Check mocha methods call.";
 
@@ -17,7 +22,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("One describe block should be generated.",function(){
-                test_describe.calledTimes().should.be.eql(1);
+                method_names.test_describe.calledTimes().should.be.eql(1);
             });
 
             after(ResetSpyMethods);
@@ -33,7 +38,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("Two describe blocks should be generated.",function(){
-                test_describe.calledTimes().should.be.eql(2);
+                method_names.test_describe.calledTimes().should.be.eql(2);
             });
 
             after(ResetSpyMethods);
@@ -50,14 +55,14 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("Three describe blocks should be generated.",function(){
-                test_describe.calledTimes().should.be.eql(3);
+                method_names.test_describe.calledTimes().should.be.eql(3);
             });
 
             after(ResetSpyMethods);
         });
     });
 
-    var runSetup = function(d){
+    var runSetup = function(d: any){
         describe(d.describe,function(){
             before(function(){
                 this.suit = mod();
@@ -74,7 +79,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(d.method + " should be called once",function(){
-                global["test_"+ d.method].calledTimes().should.be.eql(d.times);
+                method_names["test_"+ d.method].calledTimes().should.be.eql(d.times);
             });
 
             it(d.method + " spy should be called",function(){
@@ -91,7 +96,7 @@ describe(MSG,function(){
         runSetup({ method: method, describe: capitalize(method), times: 10});
     });
 
-    var runIt = function(d){
+    var runIt = function(d: any){
         describe(d.describe,function(){
             before(function(){
                 this.suit = mod();
@@ -108,7 +113,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(d.toBeCalled + " should be called once",function(){
-                global["test_"+ d.toBeCalled].calledTimes().should.be.eql(d.times);
+                method_names["test_"+ d.toBeCalled].calledTimes().should.be.eql(d.times);
             });
 
             it(d.toBeCalled + " spy should be called",function(){
@@ -126,7 +131,7 @@ describe(MSG,function(){
         {method: "xthat", toBeCalled: "xit"},
         {method: "it", toBeCalled: "it"},
         {method: "xit", toBeCalled: "xit"}
-    ].forEach(function(descr){
+    ].forEach(function(descr: any){
         descr.describe = capitalize(descr.method);
         descr.times = 10;
         runIt(descr);

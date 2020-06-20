@@ -1,6 +1,10 @@
 'use strict';
 
-global.NormalizeTests();
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { method_names } from '../setup';
+
+import sinon = require("sinon");
 
 var MSG = "Test running.";
 
@@ -64,7 +68,7 @@ describe(MSG,function(){
 
         it("spy should be called",function(){
             this.spy.called.should.be.true();
-            global.test_it.calledTimes().should.be.eql(TIMES);
+            method_names.test_it.calledTimes().should.be.eql(TIMES);
         });
 
         after(ResetSpyMethods);
@@ -76,7 +80,7 @@ describe(MSG,function(){
         createSuit();
 
         before(function(){
-            var ctxSet = {};
+            var ctxSet: any = {};
             for(var i = 0; i < TIMES; i++) {
                 ctxSet[i]  = {};
             }
@@ -88,7 +92,7 @@ describe(MSG,function(){
 
         it("spy should be called",function(){
             this.spy.called.should.be.true();
-            global.test_it.calledTimes().should.be.eql(TIMES);
+            method_names.test_it.calledTimes().should.be.eql(TIMES);
         });
 
         after(ResetSpyMethods);

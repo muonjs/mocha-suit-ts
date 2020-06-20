@@ -1,6 +1,12 @@
 'use strict';
 
-global.NormalizeTests();
+import { capitalize } from '../setup';
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { method_names } from '../setup';
+import { generateMochaMethod } from '../setup';
+
+import sinon = require("sinon");
 
 var MSG = "Composing Suit.";
 
@@ -33,7 +39,8 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(method+" should be run twice",function(){
-                global["test_"+method].calledTimes().should.be.eql(2);
+                // let test_Method = generateMochaMethod("test_"+method);
+                method_names["test_"+method].calledTimes().should.be.eql(2);
                 this.helperSpy.called.should.be.true()
             });
 
@@ -66,9 +73,9 @@ describe(MSG,function(){
 
             it(method+" should be run twice",function(){
                 if (/^x/.test(method)) {
-                    global.test_xit.calledTimes().should.be.eql(3);
+                    method_names.test_xit.calledTimes().should.be.eql(3);
                 } else {
-                    global.test_it.calledTimes().should.be.eql(3);
+                    method_names.test_it.calledTimes().should.be.eql(3);
                 }
                 this.helperSpy.called.should.be.true()
             });
