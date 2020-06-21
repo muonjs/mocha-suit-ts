@@ -2,6 +2,7 @@
 
 var MSG = "Base system test.";
 
+var expect = require("expect.js");
 describe(MSG,function(){
     var mod = require("mocha-suit");
     var run = function(){
