@@ -6,7 +6,7 @@ should.config.checkProtoEql = false;
 
 export var method_names = require("mocha-suit/lib/method_names");
 
-export var generateMochaMethod = require("./spy");
+import { generateMochaMethod } from './spy';
 
 let testMethods = [
     "describe",
@@ -21,7 +21,7 @@ let testMethods = [
     "afterAll"
 ];
 
-var substitutedMethods:any = {};
+export var substitutedMethods:any = {};
 
 method_names.renameMethod({
     describeMethod: "test_describe",
@@ -48,8 +48,7 @@ export const NormalizeTests = function(method: any){
 };
 
 testMethods.forEach(function(method){
-    let test_Method = generateMochaMethod("test_"+method);
-    substitutedMethods[method] = generateMochaMethod("test_"+method);
+    substitutedMethods[method] = method_names["test_"+method] = generateMochaMethod("test_"+method);
 });
 
 export const ResetSpyMethods = function(){
