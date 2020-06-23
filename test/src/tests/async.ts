@@ -3,23 +3,34 @@
 import { capitalize } from '../setup';
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
-import { method_names } from '../setup';
+import { generateMochaMethod } from '../spy'
 
-var Promise: PromiseConstructor = require("bluebird");
+var should = require("should");
+var expect = require("expect.js");
+
 var DELAY = 10;
+var Promise = require("bluebird");
 
 var MSG = "Asynchronous methods.";
 
-describe(MSG,function(){
-    var mod = require("mocha-suit");
+import MochaSuit = require("mocha-suit")
 
+describe(MSG,function(){
+    // var mod = require("mocha-suit");
+    var mod = MochaSuit()
     describe("With 'done' argument.",function(){
         ["before","after","beforeEach","afterEach","beforeAll","afterAll","it"].forEach(function(method){
+
+          var self: any = {
+            suit: mod,
+            callOrder: [] as any,
+          };
+
             describe(capitalize(method)+".",function(){
                 before(function() {
-                    var self = this;
-                    this.suit = mod();
-                    this.callOrder = [];
+
+                    this.suit = self.suit;
+                    this.callOrder = self.callOrder;
 
                     var call1 = function call1(done: any){
                         setTimeout(function(){
@@ -33,14 +44,15 @@ describe(MSG,function(){
                     };
 
                     if (method === "it") {
-                        this.suit[method]("",call1);
-                        this.suit[method]("",call2);
+                        self.suit[method]("",call1);
+                        self.suit[method]("",call2);
                     } else {
-                        this.suit[method](call1);
-                        this.suit[method](call2);
+                        self.suit[method](call1);
+                        self.suit[method](call2);
                     }
 
-                    this.suit();
+
+                    this.suit;
                 });
 
                 before(RunSpyMethods);
@@ -51,12 +63,12 @@ describe(MSG,function(){
                 });
 
                 it("methods should be called in reverse order",function(){
+
                     this.callOrder.should.be.eql([2,1]);
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    // let testMethodName = ["test_"+method];
-                    var doneMethod = method_names["test_"+method].doneMethod(0);
+                    var doneMethod = generateMochaMethod("test_"+method).doneMethod(0);
                     expect(doneMethod).to.be.ok();
                     expect(doneMethod.called).to.be.ok();
                 });
@@ -93,9 +105,7 @@ describe(MSG,function(){
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    // let test_Method = generateMochaMethod("test_"+method);
-                    // let testMethodName = ["test_"+method];
-                    var returned = method_names["test_"+method].returned(0);
+                    var returned = generateMochaMethod("test_"+method).returned(0);
                     expect(returned).to.be.ok();
                     expect(returned.then).to.be.ok();
                     returned.then.should.be.Function();

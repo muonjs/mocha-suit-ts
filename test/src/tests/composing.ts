@@ -4,7 +4,6 @@ import { capitalize } from '../setup';
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
 import { method_names } from '../setup';
-import { generateMochaMethod } from '../setup';
 
 import sinon = require("sinon");
 
@@ -39,7 +38,6 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(method+" should be run twice",function(){
-                // let test_Method = generateMochaMethod("test_"+method);
                 method_names["test_"+method].calledTimes().should.be.eql(2);
                 this.helperSpy.called.should.be.true()
             });
