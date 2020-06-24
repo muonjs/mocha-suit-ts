@@ -1,6 +1,6 @@
 'use strict';
 
-import { capitalize } from '../setup';
+import {capitalize, TestingMethods} from '../setup';
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
 import { generateMochaMethod } from '../spy'
@@ -52,7 +52,7 @@ describe(MSG,function(){
                     }
 
 
-                    this.suit;
+                    this.suit();
                 });
 
                 before(RunSpyMethods);
@@ -68,7 +68,7 @@ describe(MSG,function(){
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    var doneMethod = generateMochaMethod("test_"+method).doneMethod(0);
+                    var doneMethod = TestingMethods[method].doneMethod(0);
                     expect(doneMethod).to.be.ok();
                     expect(doneMethod.called).to.be.ok();
                 });
@@ -105,7 +105,7 @@ describe(MSG,function(){
                 });
 
                 it("Mochas done arguments from first call should be run",function(){
-                    var returned = generateMochaMethod("test_"+method).returned(0);
+                    var returned = TestingMethods[method].returned(0);
                     expect(returned).to.be.ok();
                     expect(returned.then).to.be.ok();
                     returned.then.should.be.Function();

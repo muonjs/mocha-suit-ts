@@ -1,27 +1,47 @@
 'use strict';
 
+import 'source-map-support/register'
+
 var should = require("should");
 
 should.config.checkProtoEql = false;
 
+const globalVariable: any = global;
+
 export var method_names = require("mocha-suit/lib/method_names");
 
-import { generateMochaMethod } from './spy';
+import {generateMochaMethod, SpyMethod} from './spy';
 
-let testMethods = [
-    "describe",
-    "xdescribe",
-    "before",
-    "beforeAll",
-    "beforeEach",
-    "it",
-    "xit",
-    "after",
-    "afterEach",
-    "afterAll"
-];
+interface MochaMethods {
+    describe: SpyMethod;
+    xdescribe: SpyMethod;
+    before: SpyMethod;
+    beforeAll: SpyMethod;
+    beforeEach: SpyMethod;
+    it: SpyMethod;
+    xit: SpyMethod;
+    after: SpyMethod;
+    afterEach: SpyMethod;
+    afterAll: SpyMethod;
+    [key:string]: SpyMethod;
+};
 
-export var substitutedMethods:any = {};
+export const TestingMethods: MochaMethods = {
+    describe: generateMochaMethod(),
+    xdescribe: generateMochaMethod(),
+    before: generateMochaMethod(),
+    beforeAll: generateMochaMethod(),
+    beforeEach: generateMochaMethod(),
+    it: generateMochaMethod(),
+    xit: generateMochaMethod(),
+    after: generateMochaMethod(),
+    afterEach: generateMochaMethod(),
+    afterAll: generateMochaMethod()
+};
+
+Object.keys(TestingMethods).forEach(function(method){
+    globalVariable["test_"+method] = TestingMethods[method];
+});
 
 method_names.renameMethod({
     describeMethod: "test_describe",
@@ -47,19 +67,15 @@ export const NormalizeTests = function(method: any){
     }
 };
 
-testMethods.forEach(function(method){
-    substitutedMethods[method] = method_names["test_"+method] = generateMochaMethod("test_"+method);
-});
-
 export const ResetSpyMethods = function(){
-    testMethods.forEach(function(method){
-        substitutedMethods[method].reset();
+    Object.keys(TestingMethods).forEach(function(method){
+        TestingMethods[method].reset();
     });
 };
 
 export const RunSpyMethods = function(){
-    testMethods.forEach(function(method){
-        substitutedMethods[method].run();
+    Object.keys(TestingMethods).forEach(function(method){
+        TestingMethods[method].run();
     });
 };
 

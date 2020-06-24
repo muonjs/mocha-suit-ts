@@ -1,20 +1,34 @@
 'use strict';
 
+import Func = Mocha.Func;
+
 var fRegCheck = /^function\s*\S*?\s*\(\S+?\)/;
 
-export function generateMochaMethod(name: string){
+interface SpyProperties {
+    run?: Function;
+    reset?: Function;
+    calledTimes?: Function;
+    isCalled?: Function;
+    calledWith?: Function;
+    returned?: Function;
+    doneMethod?: Function;
+}
 
+export interface SpyMethod extends SpyProperties {
+    (): any;
+}
+
+export function generateMochaMethod() : SpyMethod {
     var args: any[] = [];
     var ret: any[] = [];
     var called: any[] = [];
     var done: any[] = [];
 
-    var method = {
-        // name: args.push([].slice.call(arguments)),
-        name: function(){
+    var method: SpyMethod = function() {
         args.push([].slice.call(arguments));
-    },
-        run: function(){
+    };
+
+    method.run = function(){
             var ctx = {};
             for(var _i = 0; _i < args.length; _i++) {
                 (function(i){
@@ -38,34 +52,28 @@ export function generateMochaMethod(name: string){
                     });
                 })(_i);
             }
-        },
-        reset: function(){
+        };
+    method.reset = function(){
             args = [];
             ret = [];
             done = [];
             called = [];
-        },
-
-        calledTimes: function(){
+        };
+    method.calledTimes = function(){
             return args.length;
-        },
-
-        isCalled: function(i: number){
+        };
+    method.isCalled = function(i: number){
             return called[i] === true;
-        },
-
-        calledWith: function(i: number){
+        };
+    method.calledWith = function(i: number){
             return args[i];
-        },
-
-        returned: function(i: number){
+        };
+    method.returned = function(i: number){
             return ret[i];
-        },
-
-        doneMethod: function(i: number){
+        };
+    method.doneMethod = function(i: number){
             return done[i];
-        }
-    };
+        };
 
     return method;
 };

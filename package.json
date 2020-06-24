@@ -11,8 +11,7 @@
   "dependencies": {
     "awesome-typescript-loader": "^5.2.1",
     "mocha-suit": "^0.7.1",
-    "source-map-loader": "^1.0.0",
-    "source-map-support": "^0.5.19"
+    "source-map-loader": "^1.0.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.2",
@@ -25,7 +24,8 @@
     "mocha": "^7.1.2",
     "mocha-suit-ts": "file:./",
     "should": "^13.2.3",
-    "sinon": "^9.0.2"
+    "sinon": "^9.0.2",
+    "source-map-support": "^0.5.19"
   },
   "repository": {
     "type": "git",

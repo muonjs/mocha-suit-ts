@@ -2,7 +2,7 @@
 
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
-import { method_names } from '../setup';
+import { TestingMethods } from '../setup';
 
 import sinon = require("sinon");
 
@@ -68,7 +68,7 @@ describe(MSG,function(){
 
         it("spy should be called",function(){
             this.spy.called.should.be.true();
-            method_names.test_it.calledTimes().should.be.eql(TIMES);
+            TestingMethods.it.calledTimes().should.be.eql(TIMES);
         });
 
         after(ResetSpyMethods);
@@ -92,7 +92,14 @@ describe(MSG,function(){
 
         it("spy should be called",function(){
             this.spy.called.should.be.true();
-            method_names.test_it.calledTimes().should.be.eql(TIMES);
+
+            try {
+                TestingMethods.it.calledTimes().should.be.eql(TIMES);
+            } catch(e) {
+                console.log(TestingMethods.it);
+                throw e;
+            }
+
         });
 
         after(ResetSpyMethods);
