@@ -2,7 +2,7 @@
 
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
-import { method_names } from '../setup';
+import { TestingMethods } from '../setup';
 
 
 var MSG = "Suit chaining.";
@@ -37,14 +37,14 @@ describe(MSG,function(){
         // that from suit, that from helperSuit
         // that from targetSuit, that from targetHelperSuit
         // it from targetSuit, it from targetHelperSuit
-        method_names.test_it.calledTimes().should.be.eql(6);
+        TestingMethods.it.calledTimes().should.be.eql(6);
     });
 
     it("xit should called from target xit and xthat && base xthat",function(){
         // xthat from suit, xthat from helperSuit
         // xthat from targetSuit, xthat from targetHelperSuit
         // xit from targetSuit, xit from targetHelperSuit
-        method_names.test_xit.calledTimes().should.be.eql(6);
+        TestingMethods.it.calledTimes().should.be.eql(6);
     });
 
     after(ResetSpyMethods);
