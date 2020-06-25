@@ -3,7 +3,7 @@
 import { capitalize } from '../setup';
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
-import { method_names } from '../setup';
+import { TestingMethods } from '../setup';
 
 import sinon = require("sinon");
 
@@ -38,7 +38,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(method+" should be run twice",function(){
-                method_names["test_"+method].calledTimes().should.be.eql(2);
+                TestingMethods.it.calledTimes().should.be.eql(2);
                 this.helperSpy.called.should.be.true()
             });
 
@@ -71,9 +71,9 @@ describe(MSG,function(){
 
             it(method+" should be run twice",function(){
                 if (/^x/.test(method)) {
-                    method_names.test_xit.calledTimes().should.be.eql(3);
+                    TestingMethods.xit.calledTimes().should.be.eql(3);
                 } else {
-                    method_names.test_it.calledTimes().should.be.eql(3);
+                    TestingMethods.it.calledTimes().should.be.eql(3);
                 }
                 this.helperSpy.called.should.be.true()
             });
