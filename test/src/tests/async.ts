@@ -16,18 +16,14 @@ var MSG = "Asynchronous methods.";
 import MochaSuit = require("mocha-suit")
 
 describe(MSG,function(){
-    // var mod = require("mocha-suit");
-    var mod = MochaSuit()
     describe("With 'done' argument.",function(){
         ["before","after","beforeEach","afterEach","beforeAll","afterAll","it"].forEach(function(method){
-
-          var self: any = {
-            suit: mod,
-            callOrder: [] as any,
-          };
-
             describe(capitalize(method)+".",function(){
                 before(function() {
+                  var self: any = {
+                    suit: MochaSuit(),
+                    callOrder: [] as any,
+                  };
 
                     this.suit = self.suit;
                     this.callOrder = self.callOrder;
@@ -82,16 +78,21 @@ describe(MSG,function(){
         ["before","after","beforeEach","afterEach","it"].forEach(function(method){
             describe(capitalize(method)+".",function(){
                 before(function() {
-                    this.suit = mod();
+
+                    var self: any = {
+                      suit: MochaSuit(),
+                    };
+
+                    this.suit = self.suit;
 
                     var call = function(){
                         return Promise.delay(DELAY);
                     };
 
                     if (method === "it") {
-                        this.suit[method]("",call);
+                        self.suit[method]("",call);
                     } else {
-                        this.suit[method](call);
+                        self.suit[method](call);
                     }
 
                     this.suit();
