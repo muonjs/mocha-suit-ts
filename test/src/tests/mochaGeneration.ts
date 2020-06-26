@@ -3,7 +3,7 @@
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
 import { capitalize } from '../setup';
-import { method_names } from '../setup';
+import { TestingMethods } from '../setup';
 
 import sinon = require("sinon");
 
@@ -22,7 +22,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("One describe block should be generated.",function(){
-                method_names.test_describe.calledTimes().should.be.eql(1);
+                TestingMethods.describe.calledTimes().should.be.eql(1);
             });
 
             after(ResetSpyMethods);
@@ -38,7 +38,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("Two describe blocks should be generated.",function(){
-                method_names.test_describe.calledTimes().should.be.eql(2);
+                TestingMethods.describe.calledTimes().should.be.eql(2);
             });
 
             after(ResetSpyMethods);
@@ -55,7 +55,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it("Three describe blocks should be generated.",function(){
-                method_names.test_describe.calledTimes().should.be.eql(3);
+                TestingMethods.describe.calledTimes().should.be.eql(3);
             });
 
             after(ResetSpyMethods);
@@ -79,7 +79,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(d.method + " should be called once",function(){
-                method_names["test_"+ d.method].calledTimes().should.be.eql(d.times);
+                TestingMethods[d.method].calledTimes().should.be.eql(d.times);
             });
 
             it(d.method + " spy should be called",function(){
@@ -113,7 +113,7 @@ describe(MSG,function(){
             before(RunSpyMethods);
 
             it(d.toBeCalled + " should be called once",function(){
-                method_names["test_"+ d.toBeCalled].calledTimes().should.be.eql(d.times);
+                TestingMethods[d.toBeCalled].calledTimes().should.be.eql(d.times);
             });
 
             it(d.toBeCalled + " spy should be called",function(){
