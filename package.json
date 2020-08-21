@@ -3,7 +3,7 @@
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require test/build/setup.js --recursive test/build/tests",
+    "test": "mocha --require test/build/setup.js --recursive test/build/tests -g ${MOCHA_GREP:-\".\"}",
     "jstest": "mocha --require test/setup.js --recursive test/tests"
   },
   "author": "",

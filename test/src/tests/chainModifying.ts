@@ -3,44 +3,70 @@
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
 
-var MSG = "Modifying suit chain with set/reset methods.";
+import {
+    Suit,
+    before as msBefore,
+    after as msAfter,
+    insertAbove as msInsertAbove,
+    insertBelow as msInsertBelow,
+    replaceWith as msReplaceWith,
+    SuitHelper
+} from "mocha-suit-ts";
 
-describe(MSG,function(){
-    var mod = require("mocha-suit");
+describe("Modifying suit chain with set methods.",function(){
+    const mod = require("mocha-suit");
 
     describe("Normal chain execution check.",function(){
         before(function() {
-            var self = this;
-            this.suit = mod();
-            this.suit2 = this.suit.extend("");
-            this.suit3 = this.suit2.extend("");
+            const self = this;
+
             this.beforeCallStack = [];
             this.afterCallStack = [];
 
-            this.suit.before(function(){
-                self.beforeCallStack.push(1);
-            });
-            this.suit.after(function(){
-                self.afterCallStack.push(1);
-            });
+            @Suit("")
+            class Target {
+                @msBefore()
+                targetBefore(){
+                    self.beforeCallStack.push(1);
+                }
 
-            this.suit2.before(function(){
-                self.beforeCallStack.push(2);
-            });
-            this.suit2.after(function(){
-                self.afterCallStack.push(2);
-            });
+                @msAfter()
+                targetAfter(){
+                    self.afterCallStack.push(1);
+                }
+            }
 
-            this.suit3.before(function(){
-                self.beforeCallStack.push(3);
-            });
-            this.suit3.after(function(){
-                self.afterCallStack.push(3);
-            });
+            @Suit("")
+            class Target2 extends Target {
+                @msBefore()
+                target2Before(){
+                    self.beforeCallStack.push(2);
+                }
+
+                @msAfter()
+                target2After(){
+                    self.afterCallStack.push(2);
+                }
+            }
+
+            @Suit("")
+            class Target3 extends Target2 {
+                @msBefore()
+                target3Before(){
+                    self.beforeCallStack.push(3);
+                }
+
+                @msAfter()
+                target3After(){
+                    self.afterCallStack.push(3);
+                }
+            }
+
+            this.CallTarget = Target3;
         });
 
         before(function(){
-            this.suit3();
+            new (this.CallTarget)();
         });
 
         before(RunSpyMethods);
@@ -56,224 +82,311 @@ describe(MSG,function(){
         after(ResetSpyMethods);
     });
 
-    [{
-        method: "setBefore",
-        baseMethod: "before"
-    },{
-        method: "setBeforeAll",
-        baseMethod: "beforeAll"
-    }].forEach(function(d){
-        describe(d.method+" execution check.",function() {
-            before(function () {
-                var self = this;
-                this.suit = mod();
-                this.suit2 = this.suit.extend("");
-                this.suit3 = this.suit2.extend("");
-                this.suit4 = this.suit3.extend("");
-                this.suit5 = this.suit4.extend("");
-                this.beforeCallStack = [];
+    const newHelper = (beforeStack: number[], afterStack: number[], value: number) => {
+        @SuitHelper()
+        class Helper {
+            @msBefore()
+            callBefore() {
+                beforeStack.push(value);
+            }
 
-                this.suit[d.baseMethod](function () {
+            @msAfter()
+            callAfter() {
+                afterStack.push(value);
+            }
+        }
+        return Helper;
+    };
+
+    describe("insertAbove execution check.",function() {
+        before(function () {
+            const self = this;
+            this.beforeCallStack = [] as number[];
+            this.afterCallStack = [] as number[];
+
+            @Suit()
+            class Target {
+                @msBefore()
+                call() {
                     self.beforeCallStack.push(1);
-                });
+                }
 
-                this.suit2[d.baseMethod](function () {
-                    self.beforeCallStack.push(2);
-                });
-
-                this.suit3[d.baseMethod](function () {
-                    self.beforeCallStack.push(3);
-                });
-
-                this.suit4[d.baseMethod](function () {
-                    self.beforeCallStack.push(4);
-                });
-
-                this.suit5[d.baseMethod](function () {
-                    self.beforeCallStack.push(5);
-                });
-
-                this.suit3[d.method](this.suit2, function () {
-                    self.beforeCallStack.push(31);
-                });
-
-                // not setBefore calls are not properly ordered
-
-                this.suit5[d.method](this.suit2, function () {
-                    self.beforeCallStack.push(51);
-                });
-
-                this.suit4[d.method](this.suit2, function () {
-                    self.beforeCallStack.push(41);
-                });
-                this.suit4[d.method](this.suit2, function () {
-                    self.beforeCallStack.push(42);
-                });
-            });
-
-            before(function () {
-                this.suit5();
-            });
-
-            before(RunSpyMethods);
-
-            it("before call stack should have inserted calls before second suit", function () {
-                this.beforeCallStack.should.be.eql([1, 51, 41, 42, 31, 2, 3, 4, 5]);
-            });
-
-            after(ResetSpyMethods);
-        });
-    });
-
-    [{
-        method: "setAfter",
-        baseMethod: "after"
-    },{
-        method: "setAfterAll",
-        baseMethod: "afterAll"
-    }].forEach(function(d){
-        describe(d.method+" execution check.",function() {
-            before(function () {
-                var self = this;
-                this.suit = mod();
-                this.suit2 = this.suit.extend("");
-                this.suit3 = this.suit2.extend("");
-                this.suit4 = this.suit3.extend("");
-                this.suit5 = this.suit4.extend("");
-                this.afterCallStack = [];
-
-                this.suit[d.baseMethod](function () {
+                @msAfter()
+                afterCall() {
                     self.afterCallStack.push(1);
-                });
+                }
+            }
 
-                this.suit2[d.baseMethod](function () {
+            @Suit()
+            class Target2 extends Target {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(2);
+                }
+
+                @msAfter()
+                afterCall() {
                     self.afterCallStack.push(2);
-                });
+                }
+            }
 
-                this.suit3[d.baseMethod](function () {
+            const Helper3above2 = newHelper(this.beforeCallStack,this.afterCallStack,31);
+
+            @Suit()
+            class Target3 extends Target2 {
+                @msInsertAbove(Target2,Helper3above2)
+                helper3above2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(3);
+                }
+
+                @msAfter()
+                afterCall() {
                     self.afterCallStack.push(3);
-                });
+                }
+            }
 
-                this.suit4[d.baseMethod](function () {
+            const Helper4above2_1 = newHelper(this.beforeCallStack,this.afterCallStack,41);
+            const Helper4above2_2 = newHelper(this.beforeCallStack,this.afterCallStack,42);
+
+
+            @Suit()
+            class Target4 extends Target3 {
+                @msInsertAbove(Target2,Helper4above2_1)
+                helper4above2_1: any;
+
+                @msInsertAbove(Target2,Helper4above2_2)
+                helper4above2_2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(4);
+                }
+
+                @msAfter()
+                afterCall() {
                     self.afterCallStack.push(4);
-                });
+                }
+            }
 
-                this.suit5[d.baseMethod](function () {
+            const Helper5above2 = newHelper(this.beforeCallStack,this.afterCallStack,51);
+
+            @Suit()
+            class Target5 extends Target4 {
+                @msInsertAbove(Target2,Helper5above2)
+                helper5above2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(5);
+                }
+
+                @msAfter()
+                afterCall() {
                     self.afterCallStack.push(5);
-                });
+                }
+            }
 
-                this.suit3[d.method](this.suit2, function () {
-                    self.afterCallStack.push(31);
-                });
-
-                // not setBefore calls are not properly ordered
-
-                this.suit5[d.method](this.suit2, function () {
-                    self.afterCallStack.push(51);
-                });
-
-                this.suit4[d.method](this.suit2, function () {
-                    self.afterCallStack.push(41);
-                });
-                this.suit4[d.method](this.suit2, function () {
-                    self.afterCallStack.push(42);
-                });
-            });
-
-            before(function () {
-                this.suit5();
-            });
-
-            before(RunSpyMethods);
-
-            it("after call stack should have inserted calls after second suit", function () {
-                this.afterCallStack.should.be.eql([1, 2, 31, 41, 42, 51, 3, 4, 5]);
-            });
-
-            after(ResetSpyMethods);
-        });
-    });
-
-    describe("replaceWith execution check.",function() {
-        before(function () {
-            var self = this;
-            this.suit = mod();
-            this.suit2 = this.suit.extend("");
-            this.suit3 = this.suit2.extend("");
-            this.replacer = mod();
-
-            this.beforeCallStack = [];
-            this.beforeAllCallStack = [];
-            this.afterCallStack = [];
-            this.afterAllCallStack = [];
-
-            this.suit.before(function () {
-                self.beforeCallStack.push(1);
-            }).beforeAll(function(){
-                self.beforeAllCallStack.push(1);
-            }).after(function(){
-                self.afterCallStack.push(1);
-            }).afterAll(function(){
-                self.afterAllCallStack.push(1);
-            });
-
-            this.suit2.before(function () {
-                self.beforeCallStack.push(2);
-            }).beforeAll(function(){
-                self.beforeAllCallStack.push(2);
-            }).after(function(){
-                self.afterCallStack.push(2);
-            }).afterAll(function(){
-                self.afterAllCallStack.push(2);
-            });
-
-            this.suit3.before(function () {
-                self.beforeCallStack.push(3);
-            }).beforeAll(function(){
-                self.beforeAllCallStack.push(3);
-            }).after(function(){
-                self.afterCallStack.push(3);
-            }).afterAll(function(){
-                self.afterAllCallStack.push(3);
-            });
-
-            this.replacer.before(function () {
-                self.beforeCallStack.push(4);
-            }).beforeAll(function(){
-                self.beforeAllCallStack.push(4);
-            }).after(function(){
-                self.afterCallStack.push(4);
-            }).afterAll(function(){
-                self.afterAllCallStack.push(4);
-            });
-
-            this.suit3.setBefore(this.suit2,function(){
-                self.beforeCallStack.push(21);
-            });
-
-            this.suit3.replaceWith(this.suit2,this.replacer);
-            this.suit3.setBefore(this.replacer,function(){
-                self.beforeCallStack.push(41);
-            });
-            this.suit3.setAfter(this.suit2,function(){
-                self.afterCallStack.push(21);
-            });
-            this.suit3.setAfter(this.replacer,function(){
-                self.afterCallStack.push(41);
-            })
-        });
-
-        before(function () {
-            this.suit3();
+            new Target5();
         });
 
         before(RunSpyMethods);
 
         it("before call stack should have inserted calls before second suit", function () {
-            this.beforeCallStack.should.be.eql([1, 21, 4, 3]);
-            this.beforeAllCallStack.should.be.eql([1, 4, 3]);
-            this.afterCallStack.should.be.eql([1, 4, 21, 3]);
-            this.afterAllCallStack.should.be.eql([1, 4, 3]);
+            this.beforeCallStack.should.be.eql([1, 51, 41, 42, 31, 2, 3, 4, 5]);
+        });
+
+        // afterCallStack is reversed due to it is spied
+        it("after call stack should have inserted calls before second suit", function () {
+            this.afterCallStack.should.be.eql([5, 4, 3, 2, 31, 42, 41, 51, 1].reverse());
+        });
+
+        after(ResetSpyMethods);
+    });
+
+    describe("insertAbove execution check.",function() {
+        before(function () {
+            const self = this;
+            this.beforeCallStack = [] as number[];
+            this.afterCallStack = [] as number[];
+
+            @Suit()
+            class Target {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(1);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(1);
+                }
+            }
+
+            @Suit()
+            class Target2 extends Target {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(2);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(2);
+                }
+            }
+
+            const Helper3below2 = newHelper(this.beforeCallStack,this.afterCallStack,31);
+
+            @Suit()
+            class Target3 extends Target2 {
+                @msInsertBelow(Target2,Helper3below2)
+                helper3below2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(3);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(3);
+                }
+            }
+
+            const Helper4below2_1 = newHelper(this.beforeCallStack,this.afterCallStack,41);
+            const Helper4below2_2 = newHelper(this.beforeCallStack,this.afterCallStack,42);
+
+
+            @Suit()
+            class Target4 extends Target3 {
+                @msInsertBelow(Target2,Helper4below2_1)
+                helper4below2_1: any;
+
+                @msInsertBelow(Target2,Helper4below2_2)
+                helper4below2_2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(4);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(4);
+                }
+            }
+
+            const Helper5below2 = newHelper(this.beforeCallStack,this.afterCallStack,51);
+
+            @Suit()
+            class Target5 extends Target4 {
+                @msInsertBelow(Target2,Helper5below2)
+                helper5below2: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(5);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(5);
+                }
+            }
+
+            new Target5();
+        });
+
+        before(RunSpyMethods);
+
+        it("before call stack should have inserted calls after second suit", function () {
+            this.beforeCallStack.should.be.eql([1, 2, 31, 41, 42, 51, 3, 4, 5]);
+        });
+
+        // afterCallStack is reversed due to it is spied
+        it("after call stack should have inserted calls after second suit", function () {
+            this.afterCallStack.should.be.eql([5, 4, 3, 51, 42, 41, 31, 2, 1].reverse());
+        });
+
+        after(ResetSpyMethods);
+    });
+
+    describe("replaceWith execution check.",function() {
+        before(function () {
+            const self = this;
+            this.beforeCallStack = [] as number[];
+            this.afterCallStack = [] as number[];
+
+            @SuitHelper()
+            class Replacer {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(0);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(0);
+                }
+            }
+
+            @Suit()
+            class Target {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(1);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(1);
+                }
+            }
+
+            @Suit()
+            class Target2 extends Target {
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(2);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(2);
+                }
+            }
+
+            @Suit()
+            class Target3 extends Target2 {
+                @msReplaceWith(Target2,Replacer)
+                replacedAttr: any;
+
+                @msBefore()
+                call() {
+                    self.beforeCallStack.push(3);
+                }
+
+                @msAfter()
+                afterCall() {
+                    self.afterCallStack.push(3);
+                }
+            }
+
+            new Target3();
+        });
+
+        before(RunSpyMethods);
+
+        it("before call stack should have inserted calls after second suit", function () {
+            this.beforeCallStack.should.be.eql([1, 0, 3]);
+        });
+
+        // afterCallStack is reversed due to it is spied
+        it("after call stack should have inserted calls after second suit", function () {
+            this.afterCallStack.should.be.eql([3, 0, 1].reverse());
         });
 
         after(ResetSpyMethods);

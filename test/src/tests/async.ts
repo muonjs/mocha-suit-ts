@@ -1,119 +1,165 @@
 'use strict';
 
-import {capitalize, TestingMethods} from '../setup';
+import { TestingMethods } from '../setup';
 import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
-import { generateMochaMethod } from '../spy'
+import { SpyMethod } from '../spy'
 
-var should = require("should");
-var expect = require("expect.js");
+require("should");
+const expect = require("expect.js");
+const Promise = require("bluebird");
 
-var DELAY = 10;
-var Promise = require("bluebird");
+import {
+    Suit,
+    before as msBefore,
+    beforeEach as msBeforeEach,
+    after as msAfter,
+    afterEach as msAfterEach,
+    it as msIt,
+    xit as msXIt
+} from "mocha-suit-ts";
 
-var MSG = "Asynchronous methods.";
 
-import MochaSuit = require("mocha-suit")
+const DELAY = 10;
+import Done = Mocha.Done;
 
-describe(MSG,function(){
-    describe("With 'done' argument.",function(){
-        ["before","after","beforeEach","afterEach","beforeAll","afterAll","it"].forEach(function(method){
-            describe(capitalize(method)+".",function(){
-                before(function() {
-                  var self: any = {
-                    suit: MochaSuit(),
-                    callOrder: [] as any,
-                  };
+describe("Asynchronous methods",function() {
+    describe("With 'done' method",function() {
+        const TestSpyCall = (decorator: Function, spyMethod: SpyMethod) => {
+            const callOrder: number[] = [];
 
-                    this.suit = self.suit;
-                    this.callOrder = self.callOrder;
+            const call1 = function call1(done: Done){
+                setTimeout(function(){
+                    callOrder.push(1);
+                    done();
+                },DELAY);
+            };
 
-                    var call1 = function call1(done: any){
-                        setTimeout(function(){
-                            self.callOrder.push(1);
-                            done();
-                        },DELAY);
-                    };
+            const call2 = function(){
+                callOrder.push(2);
+            };
 
-                    var call2 = function(){
-                        self.callOrder.push(2);
-                    };
-
-                    if (method === "it") {
-                        self.suit[method]("",call1);
-                        self.suit[method]("",call2);
-                    } else {
-                        self.suit[method](call1);
-                        self.suit[method](call2);
+            before(function() {
+                @Suit()
+                class TargetSuit {
+                    @decorator()
+                    call1(done: Done) {
+                        return call1(done);
                     }
 
+                    @decorator()
+                    call2() {
+                        return call2();
+                    }
+                }
 
-                    this.suit();
-                });
-
-                before(RunSpyMethods);
-
-                before(function(done){
-                    // since mocha methods are spied we need to wait until first timeout is called
-                    setTimeout(done,DELAY*2);
-                });
-
-                it("methods should be called in reverse order",function(){
-
-                    this.callOrder.should.be.eql([2,1]);
-                });
-
-                it("Mochas done arguments from first call should be run",function(){
-                    var doneMethod = TestingMethods[method].doneMethod(0);
-                    expect(doneMethod).to.be.ok();
-                    expect(doneMethod.called).to.be.ok();
-                });
-
-                after(ResetSpyMethods);
+                new TargetSuit();
             });
+
+            before(RunSpyMethods);
+
+            before(function(done){
+                // since mocha methods are spied we need to wait until first timeout is called
+                setTimeout(done,DELAY*2);
+            });
+
+            it("Methods should be called in reverse order",function(){
+                (callOrder as any).should.be.eql([2,1]);
+            });
+
+            it("Mochas done arguments from first call should be run",function(){
+                const doneMethod = spyMethod.doneMethod(0);
+                expect(doneMethod).to.be.ok();
+                expect(doneMethod.called).to.be.ok();
+            });
+
+            after(ResetSpyMethods);
+        };
+
+        describe("before",function(){
+            TestSpyCall(msBefore,TestingMethods.before);
+        });
+
+        describe("beforeEach",function(){
+            TestSpyCall(msBeforeEach,TestingMethods.beforeEach);
+        });
+
+        describe("after",function(){
+            TestSpyCall(msAfter,TestingMethods.after);
+        });
+
+        describe("afterEach",function(){
+            TestSpyCall(msAfterEach,TestingMethods.afterEach);
+        });
+
+        describe("it",function(){
+            TestSpyCall(msIt,TestingMethods.it);
+        });
+
+        describe("xit",function(){
+            // xit is spied method, so it behaves same way as it and other methods.
+            TestSpyCall(msXIt,TestingMethods.xit);
         });
     });
 
     describe("With Promises",function(){
-        ["before","after","beforeEach","afterEach","it"].forEach(function(method){
-            describe(capitalize(method)+".",function(){
-                before(function() {
+        const TestSpyCall = function(decorator: Function, spy: SpyMethod) {
+            before(function() {
+                const call = function(){
+                    return Promise.delay(DELAY);
+                };
 
-                    var self: any = {
-                      suit: MochaSuit(),
-                    };
-
-                    this.suit = self.suit;
-
-                    var call = function(){
-                        return Promise.delay(DELAY);
-                    };
-
-                    if (method === "it") {
-                        self.suit[method]("",call);
-                    } else {
-                        self.suit[method](call);
+                @Suit()
+                class TargetSuit {
+                    @decorator()
+                    suitCall() {
+                        return call();
                     }
+                }
 
-                    this.suit();
-                });
-
-                before(RunSpyMethods);
-
-                before(function(done){
-                    // since mocha methods are spied we need to wait until first timeout is called
-                    setTimeout(done,DELAY*2);
-                });
-
-                it("Mochas done arguments from first call should be run",function(){
-                    var returned = TestingMethods[method].returned(0);
-                    expect(returned).to.be.ok();
-                    expect(returned.then).to.be.ok();
-                    returned.then.should.be.Function();
-                });
-
-                after(ResetSpyMethods);
+                new TargetSuit();
             });
+
+            before(RunSpyMethods);
+
+            before(function(done){
+                // since mocha methods are spied we need to wait until first timeout is called
+                setTimeout(done,DELAY*2);
+            });
+
+            it("Decorated call should return Promise object",function(){
+                const returned = spy.returned(0);
+                expect(returned).to.be.ok();
+                expect(returned.then).to.be.ok();
+                returned.then.should.be.Function();
+            });
+
+            after(ResetSpyMethods);
+        };
+
+        describe("before",function(){
+            TestSpyCall(msBefore,TestingMethods.before);
+        });
+
+        describe("beforeEach",function(){
+            TestSpyCall(msBeforeEach,TestingMethods.beforeEach);
+        });
+
+        describe("after",function(){
+            TestSpyCall(msAfter,TestingMethods.after);
+        });
+
+        describe("afterEach",function(){
+            TestSpyCall(msAfterEach,TestingMethods.afterEach);
+        });
+
+        describe("it",function(){
+            TestSpyCall(msIt,TestingMethods.it);
+        });
+
+        describe("xit",function(){
+            // xit is spied method, so it behaves same way as it and other methods.
+            TestSpyCall(msXIt,TestingMethods.xit);
         });
     });
 });
