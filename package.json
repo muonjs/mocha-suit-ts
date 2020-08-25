@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "awesome-typescript-loader": "^5.2.1",
-    "mocha-suit": "^0.7.1",
+    "mocha-suit": "^0.8.1",
     "source-map-loader": "^1.0.0"
   },
   "devDependencies": {

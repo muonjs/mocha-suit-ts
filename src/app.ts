@@ -2,7 +2,7 @@ import 'source-map-support/register'
 export const SUITPROPERTY = "__SUIT__";
 export const SUITHELPERPROPERTY = "__SUIT_HELPER__";
 
-import MochaSuit = require("mocha-suit");
+const MochaSuit = require("mocha-suit");
 
 import {
     applyBindings,
@@ -40,7 +40,7 @@ export function Suit(describe: string = "") {
         let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
         if (boundPropertyList) {
             // todo check for same properties of parents  
-            console.log(constructor,boundPropertyList);
+            // console.log(constructor,boundPropertyList);
         }
 
         Object.defineProperty(constructor.prototype,SUITPROPERTY, {
