@@ -37,11 +37,11 @@ export function Suit(describe: string = "") {
             S = MochaSuit(describe,{});
         }
 
-        let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
-        if (boundPropertyList) {
-            // todo check for same properties of parents  
-            console.log(constructor,boundPropertyList);
-        }
+        // let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
+        // if (boundPropertyList) {
+        //     // todo check for same properties of parents
+        //     console.log(constructor,boundPropertyList);
+        // }
 
         Object.defineProperty(constructor.prototype,SUITPROPERTY, {
             get() { return S; }
@@ -63,11 +63,17 @@ export function Suit(describe: string = "") {
 export function SuitHelper() {
     return function<T extends { new (...args: any[]): {} }>(constructor: T) {
         let S: any;
-        if (constructor.prototype[SUITPROPERTY]) {
-            S = constructor.prototype[SUITPROPERTY].extend();
+        if (constructor.prototype[SUITHELPERPROPERTY]) {
+            S = constructor.prototype[SUITHELPERPROPERTY].copy();
         } else {
-            S = MochaSuit({});
+            S = MochaSuit();
         }
+
+        // let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
+        // if (boundPropertyList) {
+        //     // todo check for same properties of parents
+        //     console.log(constructor,boundPropertyList);
+        // }
 
         Object.defineProperty(constructor.prototype,SUITHELPERPROPERTY, {
             get() { return S; }
@@ -197,18 +203,24 @@ export function xthat(a?: string | SuitHelperClass): MethodDecorator | PropertyD
 
 export function withHelper(a: SuitHelperClass): PropertyDecorator {
     return function(target: any, propertyKey: string) {
+        @SuitHelper()
         class Helper extends a {
             constructor(arg?: any) {
                 super(arg);
             }
         }
-        // todo check property is already bound for this and parent Suits
-
-        let boundProperties: string[] = SuitPropertyBindingList.get(target[SUITPROPERTY]) || [];
-        if (!SuitPropertyBindingList.has(target)) {
-            SuitPropertyBindingList.set(target,boundProperties);
-        }
-        boundProperties.push(propertyKey);
+        // Object.keys().forEach((key) => {
+        //    Helper
+        // });
+        // aObject.assign({},.extend());
+        // let boundProperties: string[] = SuitPropertyBindingList.get(target) || [];
+        // if (!SuitPropertyBindingList.has(target)) {
+        //     SuitPropertyBindingList.set(target,boundProperties);
+        // }
+        // boundProperties.push(propertyKey);
+        // console.log("HERE",propertyKey);
+        // Helper.targetProperty = propertyKey;
+        // console.log(propertyKey,target,Helper);
         Helper.prototype[SUITHELPERPROPERTY].bindTo(function(suit: SuitClass) {
             const suitProperties = TestsProperties.get(suit) || {};
             if (!TestsProperties.has(suit)) {
@@ -224,14 +236,14 @@ export function withHelper(a: SuitHelperClass): PropertyDecorator {
             //  }
             // }
 
-
             if (!suitProperties[propertyKey]) {
                 let propertyValue = suit[propertyKey];
                 suitProperties[propertyKey] = new Helper(propertyValue);
                 Object.defineProperty(suit,propertyKey,{
-                    get(): any {
-                        return suitProperties[propertyKey];
-                    }
+                    enumerable: true,
+                    // writable: false,
+                    configurable: true,
+                    get: () => suitProperties[propertyKey]
                 });
             }
 
