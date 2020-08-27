@@ -1,34 +1,35 @@
 {
-  "version": "0.0.1",
+  "name": "mocha-suit-ts",
+  "version": "0.0.5",
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require test/build/setup.js --recursive test/build/tests -g ${MOCHA_GREP:-\".\"}",
-    "jstest": "mocha --require test/setup.js --recursive test/tests"
+    "test": "mocha --require test/build/setup.js --recursive test/build/tests -g ${MOCHA_GREP:-\".\"}"
   },
-  "author": "",
+  "author": "Sukharev Kirill <SukharevKirill@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/muonjs/mocha-suit-ts/issues"
+  },
   "dependencies": {
-    "awesome-typescript-loader": "^5.2.1",
-    "mocha-suit": "^0.8.1",
-    "source-map-loader": "^1.0.0"
+    "@types/node": "^14.6.0",
+    "mocha-suit": "^0.8.3"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.2",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.11",
     "@types/sinon": "^9.0.4",
     "@types/underscore": "^1.8.0",
     "bluebird": "^3.5.0",
     "expect.js": "^0.3.1",
     "mocha": "^7.1.2",
-    "mocha-suit-ts": "file:./",
     "should": "^13.2.3",
     "sinon": "^9.0.2",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "mocha-suit-ts": "file://."
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/muonjs/mocha-suit-ts.git"
+    "url": "git+https://github.com/muonjs/mocha-suit-ts.git"
   }
 }

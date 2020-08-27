@@ -86,12 +86,12 @@ describe("Modifying suit chain with set methods.",function(){
         @SuitHelper()
         class Helper {
             @msBefore()
-            callBefore() {
+            helperCallBefore() {
                 beforeStack.push(value);
             }
 
             @msAfter()
-            callAfter() {
+            helperCallAfter() {
                 afterStack.push(value);
             }
         }
@@ -107,12 +107,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target {
                 @msBefore()
-                call() {
+                targetCall() {
                     self.beforeCallStack.push(1);
                 }
 
                 @msAfter()
-                afterCall() {
+                targetAfterCall() {
                     self.afterCallStack.push(1);
                 }
             }
@@ -120,12 +120,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target2 extends Target {
                 @msBefore()
-                call() {
+                target2Call() {
                     self.beforeCallStack.push(2);
                 }
 
                 @msAfter()
-                afterCall() {
+                target2AfterCall() {
                     self.afterCallStack.push(2);
                 }
             }
@@ -138,12 +138,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper3above2: any;
 
                 @msBefore()
-                call() {
+                target3Call() {
                     self.beforeCallStack.push(3);
                 }
 
                 @msAfter()
-                afterCall() {
+                target3AfterCall() {
                     self.afterCallStack.push(3);
                 }
             }
@@ -161,12 +161,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper4above2_2: any;
 
                 @msBefore()
-                call() {
+                target4Call() {
                     self.beforeCallStack.push(4);
                 }
 
                 @msAfter()
-                afterCall() {
+                target4AfterCall() {
                     self.afterCallStack.push(4);
                 }
             }
@@ -179,12 +179,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper5above2: any;
 
                 @msBefore()
-                call() {
+                target5call() {
                     self.beforeCallStack.push(5);
                 }
 
                 @msAfter()
-                afterCall() {
+                target5AfterCall() {
                     self.afterCallStack.push(5);
                 }
             }
@@ -215,12 +215,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target {
                 @msBefore()
-                call() {
+                targetCall() {
                     self.beforeCallStack.push(1);
                 }
 
                 @msAfter()
-                afterCall() {
+                targetAfterCall() {
                     self.afterCallStack.push(1);
                 }
             }
@@ -228,12 +228,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target2 extends Target {
                 @msBefore()
-                call() {
+                target2Call() {
                     self.beforeCallStack.push(2);
                 }
 
                 @msAfter()
-                afterCall() {
+                target2AfterCall() {
                     self.afterCallStack.push(2);
                 }
             }
@@ -246,12 +246,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper3below2: any;
 
                 @msBefore()
-                call() {
+                target3Call() {
                     self.beforeCallStack.push(3);
                 }
 
                 @msAfter()
-                afterCall() {
+                target3AafterCall() {
                     self.afterCallStack.push(3);
                 }
             }
@@ -269,12 +269,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper4below2_2: any;
 
                 @msBefore()
-                call() {
+                target4Call() {
                     self.beforeCallStack.push(4);
                 }
 
                 @msAfter()
-                afterCall() {
+                target4AfterCall() {
                     self.afterCallStack.push(4);
                 }
             }
@@ -287,12 +287,12 @@ describe("Modifying suit chain with set methods.",function(){
                 helper5below2: any;
 
                 @msBefore()
-                call() {
+                target5Call() {
                     self.beforeCallStack.push(5);
                 }
 
                 @msAfter()
-                afterCall() {
+                target5AfterCall() {
                     self.afterCallStack.push(5);
                 }
             }
@@ -323,12 +323,12 @@ describe("Modifying suit chain with set methods.",function(){
             @SuitHelper()
             class Replacer {
                 @msBefore()
-                call() {
+                replacerCall() {
                     self.beforeCallStack.push(0);
                 }
 
                 @msAfter()
-                afterCall() {
+                replacerAfterCall() {
                     self.afterCallStack.push(0);
                 }
             }
@@ -336,12 +336,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target {
                 @msBefore()
-                call() {
+                targetCall() {
                     self.beforeCallStack.push(1);
                 }
 
                 @msAfter()
-                afterCall() {
+                targetAfterCall() {
                     self.afterCallStack.push(1);
                 }
             }
@@ -349,12 +349,12 @@ describe("Modifying suit chain with set methods.",function(){
             @Suit()
             class Target2 extends Target {
                 @msBefore()
-                call() {
+                target2Call() {
                     self.beforeCallStack.push(2);
                 }
 
                 @msAfter()
-                afterCall() {
+                target2AfterCall() {
                     self.afterCallStack.push(2);
                 }
             }
@@ -365,12 +365,12 @@ describe("Modifying suit chain with set methods.",function(){
                 replacedAttr: any;
 
                 @msBefore()
-                call() {
+                target3Call() {
                     self.beforeCallStack.push(3);
                 }
 
                 @msAfter()
-                afterCall() {
+                target3AfterCall() {
                     self.afterCallStack.push(3);
                 }
             }
