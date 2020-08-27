@@ -1,6 +1,8 @@
-test/build
-build
 /node_modules
+test/
+.gitignore
+README.md
+docs
 npm-debug.log
 *.db
 *.log

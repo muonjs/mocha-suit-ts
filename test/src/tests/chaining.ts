@@ -58,7 +58,7 @@ describe("Suit chaining",function(){
             xthatSuper() {}
 
             @withHelper(Helper)
-            _with: any;
+            superWith: any;
 
             @msAfter()
             afterSuper() {}
@@ -78,7 +78,7 @@ describe("Suit chaining",function(){
             xitTarget() {}
 
             @withHelper(Helper)
-            _with: any;
+            targetWith: any;
 
             @msAfter()
             afterTarget() {}
