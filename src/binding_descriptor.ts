@@ -34,7 +34,7 @@ export class BindingMapDescriptor {
     }
 
     bindTo(S: any) {
-        S[this.method](this.call);
+        S[this.method](this.describe,this.call);
     }
 }
 
@@ -83,31 +83,25 @@ export class AfterEachBindingMapDescriptor extends  BindingMapDescriptor {
     }
 }
 
-class ExecBindingMapDescriptor extends BindingMapDescriptor {
-    bindTo(S: any) {
-        S[this.method](this.describe,this.call);
-    }
-}
-
-export class ItBindingMapDescriptor extends ExecBindingMapDescriptor {
+export class ItBindingMapDescriptor extends BindingMapDescriptor {
     constructor(d:string,c:Function|SuitHelperClass) {
         super("it",d,c);
     }
 }
 
-export class ThatBindingMapDescriptor extends ExecBindingMapDescriptor {
+export class ThatBindingMapDescriptor extends BindingMapDescriptor {
     constructor(d:string,c:Function|SuitHelperClass) {
         super("that",d,c);
     }
 }
 
-export class XItBindingMapDescriptor extends ExecBindingMapDescriptor {
+export class XItBindingMapDescriptor extends BindingMapDescriptor {
     constructor(d:string,c:Function|SuitHelperClass) {
         super("xit",d,c);
     }
 }
 
-export class XThatBindingMapDescriptor extends ExecBindingMapDescriptor {
+export class XThatBindingMapDescriptor extends BindingMapDescriptor {
     constructor(d:string,c:Function|SuitHelperClass) {
         super("xthat",d,c);
     }
@@ -116,6 +110,9 @@ export class XThatBindingMapDescriptor extends ExecBindingMapDescriptor {
 export class WithBindingMapDescriptor extends BindingMapDescriptor {
     constructor(c:SuitHelperClass) {
         super("with",undefined,c);
+    }
+    bindTo(S: any) {
+        S[this.method](this.call);
     }
 }
 
