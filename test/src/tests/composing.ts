@@ -179,3 +179,136 @@
 //         after(ResetSpyMethods);
 //     });
 // });
+
+
+import { capitalize } from '../setup';
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { TestingMethods } from '../setup';
+
+import { Suit, SuitHelper,
+         before as msBefore,
+         beforeEach as msBeforeEach,
+         it as msIt,
+         xit as msXIt,
+         that as msThat,
+         xthat as msXThat,
+         after as msAfter,
+         afterEach as msAfterEach, } from 'mocha-suit-ts';
+
+import sinon = require("sinon");
+
+const MSG = "Composing Suit.";
+
+describe(MSG, function(){
+    [msBefore, msBeforeEach, msAfter, msAfterEach].forEach(function(msMethod) {
+        describe(capitalize(msMethod.name), function() {
+            before(function(){
+
+                @SuitHelper()
+                class Helper{
+                    @msMethod()
+                    helperMethod() {};
+                };
+
+                @Suit()
+                class SuperSuit{
+                    @msBefore()
+                    beforeFunction() {};
+
+                    @msBeforeEach()
+                    beforeEachFunction() {};
+
+                    @msIt()
+                    itFunction() {};
+
+                    @msXIt()
+                    xitFunction() {};
+
+                    @msThat()
+                    thatFunction() {};
+
+                    @msXThat()
+                    xthatFunction() {};
+
+                    @msAfterEach()
+                    afterEachFunction() {};
+
+                    @msAfter()
+                    afterFunction() {};
+
+                    @msMethod(Helper)
+                    simpleHelperMethod: any;
+                };
+
+                new SuperSuit();
+            });
+
+            before(RunSpyMethods);
+
+            it(msMethod.name+" should be run twice",function(){
+                TestingMethods[msMethod.name].calledTimes().should.be.eql(2);
+                            // helperMethod.called.should.be.true()
+            });
+
+            after(ResetSpyMethods);
+        });
+    });
+
+    [msIt, msXIt, msThat, msXThat].forEach(function(msMethod) {
+        describe(capitalize(msMethod.name), function() {
+            before(function(){
+
+                @SuitHelper()
+                class Helper{
+                    @msMethod()
+                    helperMethod() {};
+                };
+
+                @Suit()
+                class SuperSuit{
+                    @msBefore()
+                    beforeFunction() {};
+
+                    @msBeforeEach()
+                    beforeEachFunction() {};
+
+                    @msIt()
+                    itFunction() {};
+
+                    @msXIt()
+                    xitFunction() {};
+
+                    @msThat()
+                    thatFunction() {};
+
+                    @msXThat()
+                    xthatFunction() {};
+
+                    @msAfterEach()
+                    afterEachFunction() {};
+
+                    @msAfter()
+                    afterFunction() {};
+
+                    @msMethod(Helper)
+                    simpleHelperMethod: any;
+                };
+
+                new SuperSuit();
+            });
+
+            before(RunSpyMethods);
+
+            it(msMethod.name+" should be run triple",function(){
+                if (/^x/.test(msMethod.name)) {
+                    TestingMethods.xit.calledTimes().should.be.eql(3);
+                } else {
+                    TestingMethods.it.calledTimes().should.be.eql(3);
+                };
+            });
+
+            after(ResetSpyMethods);
+        });
+    })
+});
