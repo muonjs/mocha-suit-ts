@@ -9,14 +9,13 @@ const expect = require("expect.js");
 import sinon = require("sinon");
 
 import {
-    Suit, SuitHelper,
+    Suit,
     before as msBefore,
     beforeEach as msBeforeEach,
     after as msAfter,
     afterEach as msAfterEach,
     it as msIt, that as msThat,
     xit as msXIt, xthat as msXThat,
-    withHelper
 } from "mocha-suit-ts";
 
 
