@@ -76,7 +76,7 @@ For full list of **MochaSuit for TS** advantages look at [use cases](#use-cases)
 ## Installation and running 
 
 **MochaSuit for TS** can be installed as any other NPM-package. 
-Also you need to install Mocha and TypeScript compiler by yourself.
+Also you need to install Mocha and compiler for TypeScript by yourself.
 
 ```shell script
 $ npm i --save mocha-suit-ts
