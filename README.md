@@ -1,7 +1,7 @@
 # MochaSuit for TypeScript
 
-**MochaSuit for TS** - is a wrapper for widely spread [Mocha](https://mochajs.org) testing framework,
-which utilize all benefits of OOP and static typing provided by [TypeScript](http://typescriptlang.org/).
+**MochaSuit for TS** - is a wrapper for widely spread testing framework - [Mocha](https://mochajs.org),
+which utilizes all benefits of OOP and static typing provided by [TypeScript](http://typescriptlang.org/).
 
 ## How it works
 
@@ -71,7 +71,7 @@ Result of code execution looks like well known Spec reporter (or any of your cho
   1 passing (292ms)
 ```
 
-For full list of **MochaSuit for TS** advantages look at [use cases](#use-cases)
+For full list of **MochaSuit for TS** advantages look at [use cases](#use-cases) and [Q&A](#q&a)
 
 ## Installation and running 
 
@@ -104,7 +104,7 @@ $ tree .
 Major trait of **MochaSuit for TS** is using of TypeScript decorators, which are still language experimental feature. 
 Hence do not forget to include `experimentalDecorators` in your `tsconfig.json`.
 
-Here is `tsc` compiler configuration which is used for building MochaSuit for TS itself:
+Here is `tsc` compiler configuration which is used for building **MochaSuit for TS** itself:
 
 ```json
 {
@@ -139,9 +139,13 @@ $ mocha --recursive test/build
 
 *Coming soon*
 
+# Q&A
+
+*Coming soon*
+
 ## LICENSE
 
-Copyright (c) 2020 [Kirill Sukharev](sukharevkirill@gmail.com). The MIT License [MIT](./LICENSE)
+Copyright (c) 2020 [Kirill Sukharev](email://sukharevkirill@gmail.com). The MIT License [MIT](./LICENSE)
 
 
 
