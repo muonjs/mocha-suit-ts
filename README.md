@@ -71,7 +71,7 @@ Result of code execution looks like well known Spec reporter (or any of your cho
   1 passing (292ms)
 ```
 
-For full list of **MochaSuit for TS** advantages look at [use cases](#use-cases) and [Q&A](#q&a)
+For full list of **MochaSuit for TS** advantages look at [use cases](#use-cases) and [Q&A](#qa)
 
 ## Installation and running 
 
