@@ -128,7 +128,7 @@ Here is `tsc` compiler configuration which is used for building **MochaSuit for 
 
 ### Running
 
-Launch tests is easy as any other mocha tests:
+Launching tests is easy as any other mocha tests:
 
 ```shell script
 $ tsc -p test
