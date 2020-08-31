@@ -12,8 +12,9 @@
     "url": "https://github.com/muonjs/mocha-suit-ts/issues"
   },
   "dependencies": {
-    "@types/node": "^14.6.0",
-    "mocha-suit": "^0.8.3"
+    "awesome-typescript-loader": "^5.2.1",
+    "mocha-suit": "^0.8.1",
+    "source-map-loader": "^1.0.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.2",

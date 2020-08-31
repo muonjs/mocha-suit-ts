@@ -47,7 +47,11 @@ export function Suit(describe: string = "") {
             S = MochaSuit(describe,{});
         }
 
-        boundPropertyCheck(constructor.prototype, S);
+        let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
+        if (boundPropertyList) {
+            // todo check for same properties of parents
+            // console.log(constructor,boundPropertyList);
+        }
 
         Object.defineProperty(constructor.prototype,SUITPROPERTY, {
             value: S, configurable: false, enumerable: false, writable: false
@@ -199,5 +203,3 @@ export function replaceWith(s: SuitClass, helper: SuitHelperClass): PropertyDeco
         appendSuitBinding(target,new ReplaceBindingMapDescriptor(s,Helper));
     }
 }
-
-
