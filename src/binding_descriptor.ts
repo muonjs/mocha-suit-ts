@@ -20,28 +20,32 @@ export function applyBindings(target: any, suit: any) {
 export class BindingMapDescriptor {
     describe: string;
     method: string;
-    call: Function|SuitHelperClass;
+    call: Function;
+    helper: SuitHelperClass;
     constructor(m:string,d:string,c:Function|SuitHelperClass) {
         this.method = m;
         let _c: any  = c;
         if (_c.prototype && _c.prototype[SUITHELPERPROPERTY]) {
-            this.call = _c.prototype[SUITHELPERPROPERTY];
+            this.helper = _c.prototype[SUITHELPERPROPERTY];
         } else {
             this.call = c;
         }
-
         this.describe = d;
     }
 
     bindTo(S: any) {
-        S[this.method](this.describe,this.call);
+        if (this.helper) {
+            S[this.method](this.helper);
+        } else {
+            S[this.method](this.describe,this.call);
+        }
     }
 }
 
 class ChainModifyingBindingMapDescriptor extends  BindingMapDescriptor {
     positional: SuitClass;
-    constructor(p:SuitClass,m:string,c:Function|SuitHelperClass) {
-        super(m,undefined,c);
+    constructor(p:SuitClass,m:string,h:SuitHelperClass) {
+        super(m,undefined,h);
         let _p: any  = p;
         if (_p.prototype && _p.prototype[SUITPROPERTY]) {
             this.positional = _p.prototype[SUITPROPERTY];
@@ -51,7 +55,7 @@ class ChainModifyingBindingMapDescriptor extends  BindingMapDescriptor {
     }
 
     bindTo(S: any) {
-        S[this.method](this.positional,this.call);
+        S[this.method](this.positional,this.helper);
     }
 
 }
@@ -108,11 +112,11 @@ export class XThatBindingMapDescriptor extends BindingMapDescriptor {
 }
 
 export class WithBindingMapDescriptor extends BindingMapDescriptor {
-    constructor(c:SuitHelperClass) {
-        super("with",undefined,c);
+    constructor(h:SuitHelperClass) {
+        super("with",undefined,h);
     }
     bindTo(S: any) {
-        S[this.method](this.call);
+        S[this.method](this.helper);
     }
 }
 

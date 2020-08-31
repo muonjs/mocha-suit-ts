@@ -47,11 +47,7 @@ export function Suit(describe: string = "") {
             S = MochaSuit(describe,{});
         }
 
-        let boundPropertyList: string[] = SuitPropertyBindingList.get(constructor.prototype);
-        if (boundPropertyList) {
-            // todo check for same properties of parents
-            // console.log(constructor,boundPropertyList);
-        }
+        boundPropertyCheck(constructor.prototype, S);
 
         Object.defineProperty(constructor.prototype,SUITPROPERTY, {
             value: S, configurable: false, enumerable: false, writable: false
@@ -117,13 +113,13 @@ export function SuitFactory(Suit: SuitClass, testSet: any) {
 }
 
 function applyDecorator(BindingMap: any, a?: string | SuitHelperClass) {
-    return function(target: any, propertyKey: string) {
-        if ((typeof a === "string") || a === undefined) {
-            let propertyName = bindCallProperty(target, propertyKey);
-            appendSuitBinding(target, new BindingMap(`${propertyName}: ${a}`, target[propertyKey]));
-        } else {
+    return function(target: any, propertyKey: string, descriptor?: PropertyDescriptor) {
+        if (a && a.prototype && a.prototype[SUITHELPERPROPERTY]) {
             let Helper = bindHelperProperty(a, target, propertyKey);
             appendSuitBinding(target, new BindingMap(undefined, Helper));
+        } else {
+            let propertyName = bindCallProperty(target, propertyKey);
+            appendSuitBinding(target, new BindingMap(`${propertyName}: ${a}`, target[propertyKey]));
         }
     }
 }
