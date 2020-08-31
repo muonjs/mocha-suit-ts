@@ -198,22 +198,28 @@ import { Suit, SuitHelper,
 
 import sinon = require("sinon");
 
+const expect = require("expect.js");
+
 const MSG = "Composing Suit.";
 
 describe(MSG, function(){
     [msBefore, msBeforeEach, msAfter, msAfterEach].forEach(function(msMethod) {
         describe(capitalize(msMethod.name), function() {
+            const helperSpy = sinon.spy();
+
             before(function(){
 
                 @SuitHelper()
-                class Helper{
+                class Helper {
                     @msMethod()
-                    helperMethod() {};
+                    helperMethod() {
+                        helperSpy();
+                    };
                 };
 
                 @Suit()
-                class SuperSuit{
-                    @msBefore()
+                class SuperSuit {
+                    @msBefore(Helper)
                     beforeFunction() {};
 
                     @msBeforeEach()
@@ -237,7 +243,7 @@ describe(MSG, function(){
                     @msAfter()
                     afterFunction() {};
 
-                    @msMethod(Helper)
+                    @msMethod(Helper)  //у меня так не работает: helperSpy() не запускается
                     simpleHelperMethod: any;
                 };
 
@@ -248,7 +254,9 @@ describe(MSG, function(){
 
             it(msMethod.name+" should be run twice",function(){
                 TestingMethods[msMethod.name].calledTimes().should.be.eql(2);
-                            // helperMethod.called.should.be.true()
+            });
+            it("helper method should be called", function() {
+                expect(helperSpy.called).to.be.ok();
             });
 
             after(ResetSpyMethods);
@@ -257,12 +265,14 @@ describe(MSG, function(){
 
     [msIt, msXIt, msThat, msXThat].forEach(function(msMethod) {
         describe(capitalize(msMethod.name), function() {
+            const helperSpy = sinon.spy();
+
             before(function(){
 
                 @SuitHelper()
                 class Helper{
                     @msMethod()
-                    helperMethod() {};
+                    helperMethod() { return helperSpy(); };
                 };
 
                 @Suit()
@@ -306,6 +316,7 @@ describe(MSG, function(){
                 } else {
                     TestingMethods.it.calledTimes().should.be.eql(3);
                 };
+                expect(helperSpy.called).to.be.ok();
             });
 
             after(ResetSpyMethods);
