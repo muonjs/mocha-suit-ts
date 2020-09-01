@@ -37,7 +37,7 @@ describe(MSG, function(){
 
                 @Suit()
                 class SuperSuit {
-                    @msBefore(Helper)
+                    @msBefore()
                     beforeFunction() {};
 
                     @msBeforeEach()
@@ -61,7 +61,7 @@ describe(MSG, function(){
                     @msAfter()
                     afterFunction() {};
 
-                    @msMethod(Helper)  //у меня так не работает: helperSpy() не запускается
+                    @msMethod(Helper)
                     simpleHelperMethod: any;
                 };
 
