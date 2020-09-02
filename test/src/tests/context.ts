@@ -4,7 +4,8 @@ import { RunSpyMethods } from '../setup';
 import { ResetSpyMethods } from '../setup';
 
 import { Suit,
-         it as msIt} from "mocha-suit-ts";
+         it as msIt,
+         before as msBefore } from "mocha-suit-ts";
 
 const MSG = "Context generation.";
 
@@ -43,32 +44,45 @@ describe(MSG,function(){
         after(ResetSpyMethods);
     });
 
-    // describe("With extend call.",function(){
-    //     before(function(){
-    //         this.testCtx = {
-    //             testKey: true
-    //         };
-    //         this.suit = mod("some").extend("",this.testCtx);
+    describe("With class extend.",function(){  //больше похоже на проверку наследования методов
+        let testCtx = {
+            testKey: "test_context"
+        };
+        before(function(){
+            const self = this;
+
+            @Suit()
+            class SuperSuit {
+                @msBefore()
+                itFunction() {
+                    self.retCtx = this;
+                };
+            };
+
+            @Suit()
+            class TargetSuit extends SuperSuit {
+                testKey: string;
+
+                constructor(testCtx: any) {
+                    super();
+                    this.testKey = testCtx.testKey;
+                };
+
+            };
+
+            new TargetSuit(testCtx)
+        });
+
+        before(RunSpyMethods);
+
+        it("testKey should exists",function() {
+            this.retCtx.should.be.eql(testCtx);
+        });
+
+        after(ResetSpyMethods);
+    });
     //
-    //         const self = this;
-    //
-    //         this.suit.it("",function(){
-    //             self.retCtx = this.suit;
-    //         });
-    //
-    //         this.suit();
-    //     });
-    //
-    //     before(RunSpyMethods);
-    //
-    //     it("testKey should exists",function() {
-    //         this.retCtx.should.be.eql(this.testCtx);
-    //     });
-    //
-    //     after(ResetSpyMethods);
-    // });
-    //
-    // describe("With test run call.",function(){
+    // describe("With test run call.",function(){  //Если правильно понимаю, то это реализуется через SuitFactory у Нади
     //     before(function(){
     //         this.testCtx = {
     //             testKey: true
