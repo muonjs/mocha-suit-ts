@@ -24,10 +24,9 @@ describe(MSG,function(){
 
   const checkCalling = function(methodToBeCalled: Function){
     let timesCalled = 1;
-    if ((methodToBeCalled.name=='it') || (methodToBeCalled.name=='xit')){
+    if ((methodToBeCalled.name == 'it') || (methodToBeCalled.name == 'xit')){
       timesCalled = 2;
     }
-
     it(methodToBeCalled.name + " should be called "+timesCalled,function(){
       TestingMethods[methodToBeCalled.name].calledTimes().should.be.eql(timesCalled);
     });
