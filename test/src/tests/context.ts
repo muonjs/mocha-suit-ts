@@ -64,7 +64,7 @@ describe(MSG,function(){
 
             @Suit()
             class TargetSuit extends SuperSuit {
-                testKey: "targetClassKey";
+                testKey = "targetClassKey";
             };
 
             new TargetSuit(passedTestCtx);
