@@ -1,58 +1,119 @@
-// 'use strict';
-//
-// import {Suit} from "../../../src/app";
-//
-// const MSG = "Base system test.";
-//
-// const expect = require("expect.js");
-// describe(MSG,function(){
-//     const mod = require("mocha-suit");
-//     const run = function(){
-//         it("Suit should have all base factory methods.",function(){
-//             const self = this;
-//             @Suit("")
-//             class TargetSuit {
-//
-//             }
-//             self.suit.should.have.property("name","Suit");
-//             [
-//                 "extend",
-//                 "before","beforeEach","beforeAll",
-//                 "after","afterEach","afterAll",
-//                 "it","xit",
-//                 "that","xthat",
-//                 "with","replaceWith",
-//                 "setBefore","setAfter",
-//                 "setBeforeAll","setAfterAll"
-//             ].forEach(function(prop){
-//                 self.suit.should.have.property(prop).which.is.a.Function();
-//             });
-//         });
-//
-//     };
-//
-//     describe("Generated suit",function(){
-//         before(function(){
-//
-//             @Suit('')
-//             class TestSuit {}
-//
-//             this.suit = TestSuit;
-//         });
-//         run();
-//         it("Suit parent should be null",function(){
-//             expect(this.suit.parent).to.eql(null);
-//         });
-//     });
-//
-//     describe("Extended suit",function(){
-//         before(function(){
-//             this.parent = mod();
-//             this.suit = this.parent.extend("some");
-//         });
-//         run();
-//         it("Suit parent should be null",function(){
-//             expect(this.suit.parent).to.eql(this.parent);
-//         });
-//     });
-// });
+'use strict';
+
+import { RunSpyMethods } from '../setup';
+import { ResetSpyMethods } from '../setup';
+import { TestingMethods } from '../setup';
+
+require("should");
+const expect = require("expect.js");
+import sinon = require("sinon");
+
+import {
+    Suit,
+    before as msBefore,
+    beforeEach as msBeforeEach,
+    after as msAfter,
+    afterEach as msAfterEach,
+    it as msIt, that as msThat,
+    xit as msXIt, xthat as msXThat,
+} from "mocha-suit-ts";
+
+const MSG = "Base system test.";
+
+describe(MSG,function(){
+
+  const checkCalling = function(methodToBeCalled: Function){
+    let timesCalled = 1;
+    if ((methodToBeCalled.name=='it') || (methodToBeCalled.name=='xit')){
+      timesCalled = 2;
+    }
+
+    it(methodToBeCalled.name + " should be called "+timesCalled,function(){
+      TestingMethods[methodToBeCalled.name].calledTimes().should.be.eql(timesCalled);
+    });
+  };
+
+
+  describe("Test simple suite methods calling",function(){
+    before(function(){
+      @Suit()
+      class TestSuit {
+        @msBefore()
+        emptyBefore(){}
+
+        @msBeforeEach()
+        emptyBeforeEach(){}
+
+        @msAfter()
+        emptyAfter(){}
+
+        @msAfterEach()
+        emptyAfterEach(){}
+
+        @msIt()
+        emptyIt(){}
+
+        @msThat()
+        emptyThat(){}
+
+        @msXIt()
+        emptyXit(){}
+
+        @msXThat()
+        emptyXThat(){}
+      }
+
+      new TestSuit();
+    });
+
+    before(RunSpyMethods);
+
+    [msBefore,msBeforeEach,msAfter,msAfterEach,msIt,msXIt].forEach(function(method){
+       checkCalling(method);
+    });
+
+    after(ResetSpyMethods);
+  });
+
+  describe("Generated suit",function(){
+    before(function(){
+      @Suit()
+      class TestSuit {}
+
+      new TestSuit();
+    });
+
+    before(RunSpyMethods);
+
+    it("'before' should not be called",function(){
+      TestingMethods.before.calledTimes().should.be.eql(0);
+    });
+
+    after(ResetSpyMethods);
+  });
+
+  describe("Extended suit",function(){
+    before(function(){
+      @Suit()
+      class ParentSuit {
+
+        @msBefore()
+        parentBefore(){}
+
+      }
+
+      @Suit()
+      class TestSuit extends ParentSuit {}
+
+      new TestSuit();
+    });
+
+    before(RunSpyMethods);
+
+    it("'before' should be called once",function(){
+      TestingMethods.before.calledTimes().should.be.eql(1);
+    });
+
+    after(ResetSpyMethods);
+  });
+});
