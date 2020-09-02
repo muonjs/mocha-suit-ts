@@ -113,13 +113,13 @@ export function SuitFactory(Suit: SuitClass, testSet: any) {
 }
 
 function applyDecorator(BindingMap: any, a?: string | SuitHelperClass) {
-    return function(target: any, propertyKey: string) {
-        if ((typeof a === "string") || a === undefined) {
-            let propertyName = bindCallProperty(target, propertyKey);
-            appendSuitBinding(target, new BindingMap(`${propertyName}: ${a}`, target[propertyKey]));
-        } else {
+    return function(target: any, propertyKey: string, descriptor?: PropertyDescriptor) {
+        if (a && a.prototype && a.prototype[SUITHELPERPROPERTY]) {
             let Helper = bindHelperProperty(a, target, propertyKey);
             appendSuitBinding(target, new BindingMap(undefined, Helper));
+        } else {
+            let propertyName = bindCallProperty(target, propertyKey);
+            appendSuitBinding(target, new BindingMap(`${propertyName}: ${a}`, target[propertyKey]));
         }
     }
 }
@@ -199,5 +199,3 @@ export function replaceWith(s: SuitClass, helper: SuitHelperClass): PropertyDeco
         appendSuitBinding(target,new ReplaceBindingMapDescriptor(s,Helper));
     }
 }
-
-
