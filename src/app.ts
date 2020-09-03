@@ -60,7 +60,7 @@ export function Suit(describe: string = "") {
                 super(...args);
                 S.bindTo(this);
                 if (S == (this as any)[SUITPROPERTY]) {
-                    S(...args);
+                    S();
                 }
             }
         };
@@ -100,7 +100,7 @@ export function SuitFactory(Suit: SuitClass, testSet: any) {
         class FactoryClass extends Suit {
             constructor(...args: any[]) {
                 super(...args);
-                S(...args);
+                S();
             }
         }
 
