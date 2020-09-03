@@ -128,7 +128,7 @@ describe(MSG, function(){
 
             before(RunSpyMethods);
 
-            it(msMethod.name+" method should be run triple",function(){
+            it(msMethod.name+" method should be run trice",function(){
                 if (/^x/.test(msMethod.name)) {
                     TestingMethods.xit.calledTimes().should.be.eql(3);
                 } else {
@@ -216,12 +216,38 @@ describe(MSG, function(){
 
         before(RunSpyMethods);
 
-        [beforeSpy, beforeEachSpy, itSpy, xitSpy, thatSpy, xthatSpy, afterEachSpy, afterSpy].forEach(function(spyMethod) {
-            it(spyMethod.name + " helper method should be called",function(){
-                expect(spyMethod.called).to.be.ok();
-            });
+        it("before helper method should be called",function(){
+            expect(beforeSpy.called).to.be.ok();
+        });
+
+        it("beforeEach helper method should be called",function(){
+            expect(beforeEachSpy.called).to.be.ok();
+        });
+
+        it("it helper method should be called",function(){
+            expect(itSpy.called).to.be.ok();
+        });
+
+        it("xit helper method should be called",function(){
+            expect(xitSpy.called).to.be.ok();
+        });
+
+        it("that helper method should be called",function(){
+            expect(thatSpy.called).to.be.ok();
+        });
+
+        it("xthat helper method should be called",function(){
+            expect(xthatSpy.called).to.be.ok();
+        });
+
+        it("afterEach helper method should be called",function(){
+            expect(afterEachSpy.called).to.be.ok();
+        });
+
+        it("after helper method should be called",function(){
+            expect(afterSpy.called).to.be.ok();
+        });
 
         after(ResetSpyMethods);
-        });
     });
 });
