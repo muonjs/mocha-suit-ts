@@ -1,6 +1,6 @@
 {
   "name": "mocha-suit-ts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
   "scripts": {
@@ -12,21 +12,21 @@
     "url": "https://github.com/muonjs/mocha-suit-ts/issues"
   },
   "dependencies": {
-    "@types/node": "^14.6.0",
+    "@types/node": "^14.14.41",
     "mocha-suit": "^0.8.5"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.2",
+    "@types/bluebird": "^3.5.33",
     "@types/mocha": "^7.0.2",
-    "@types/sinon": "^9.0.4",
-    "@types/underscore": "^1.8.0",
+    "@types/sinon": "^9.0.11",
+    "@types/underscore": "^1.11.2",
     "bluebird": "^3.5.0",
     "expect.js": "^0.3.1",
     "mocha": "^7.1.2",
+    "mocha-suit-ts": "file://.",
     "should": "^13.2.3",
-    "sinon": "^9.0.2",
-    "source-map-support": "^0.5.19",
-    "mocha-suit-ts": "file://."
+    "sinon": "^9.2.4",
+    "source-map-support": "^0.5.19"
   },
   "repository": {
     "type": "git",
