@@ -112,7 +112,7 @@ export function SuitFactory(Suit: SuitClass, testSet: any) {
     });
 }
 
-function applyDecorator(BindingMap: any, a?: string | SuitHelperClass) {
+function applyDecorator(BindingMap: any, a?: string | SuitHelperClass, ...args: any[]) {
     return function(target: any, propertyKey: string, descriptor?: PropertyDescriptor) {
         if (a && a.prototype && a.prototype[SUITHELPERPROPERTY]) {
             let Helper = bindHelperProperty(a, target, propertyKey);
@@ -125,77 +125,77 @@ function applyDecorator(BindingMap: any, a?: string | SuitHelperClass) {
 }
 
 export function before(description?: string): MethodDecorator;
-export function before(helper: SuitHelperClass): PropertyDecorator;
-export function before(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(BeforeBindingMapDescriptor,a);
+export function before(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function before(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(BeforeBindingMapDescriptor,a,...args);
 }
 
 export function beforeEach(description?: string): MethodDecorator;
-export function beforeEach(helper: SuitHelperClass): PropertyDecorator;
-export function beforeEach(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(BeforeEachBindingMapDescriptor,a);
+export function beforeEach(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function beforeEach(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(BeforeEachBindingMapDescriptor,a,...args);
 }
 
 export function after(description?: string): MethodDecorator;
-export function after(helper: SuitHelperClass): PropertyDecorator;
-export function after(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(AfterBindingMapDescriptor,a);
+export function after(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function after(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(AfterBindingMapDescriptor,a,...args);
 }
 
 export function afterEach(description?: string): MethodDecorator;
-export function afterEach(helper: SuitHelperClass): PropertyDecorator;
-export function afterEach(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(AfterEachBindingMapDescriptor,a);
+export function afterEach(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function afterEach(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(AfterEachBindingMapDescriptor,a,...args);
 }
 
 export function it(description?: string): MethodDecorator;
-export function it(helper: SuitHelperClass): PropertyDecorator;
-export function it(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(ItBindingMapDescriptor,a);
+export function it(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function it(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(ItBindingMapDescriptor,a,...args);
 }
 
 export function that(description?: string): MethodDecorator;
-export function that(helper: SuitHelperClass): PropertyDecorator;
-export function that(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(ThatBindingMapDescriptor,a);
+export function that(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function that(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(ThatBindingMapDescriptor,a,...args);
 }
 
 export function xit(description?: string): MethodDecorator;
-export function xit(helper: SuitHelperClass): PropertyDecorator;
-export function xit(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(XItBindingMapDescriptor,a);
+export function xit(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function xit(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(XItBindingMapDescriptor,a,...args);
 }
 
 export function xthat(description?: string): MethodDecorator;
-export function xthat(helper: SuitHelperClass): PropertyDecorator;
-export function xthat(a?: string | SuitHelperClass): MethodDecorator | PropertyDecorator {
-    return applyDecorator(XThatBindingMapDescriptor,a);
+export function xthat(helper: SuitHelperClass, ...args: any[]): PropertyDecorator;
+export function xthat(a?: string | SuitHelperClass, ...args: any[]): MethodDecorator | PropertyDecorator {
+    return applyDecorator(XThatBindingMapDescriptor,a,...args);
 }
 
-export function withHelper(a: SuitHelperClass): PropertyDecorator {
+export function withHelper(a: SuitHelperClass,...args: any[]): PropertyDecorator {
     return function(target: any, propertyKey: string) {
-        let Helper = bindHelperProperty(a,target,propertyKey);
+        let Helper = bindHelperProperty(a,target,propertyKey,...args);
         appendSuitBinding(target,new WithBindingMapDescriptor(Helper));
     }
 }
 
-export function insertAbove(s: SuitClass, helper: SuitHelperClass): PropertyDecorator {
+export function insertAbove(s: SuitClass, helper: SuitHelperClass,...args: any[]): PropertyDecorator {
     return function(target: any, propertyKey: string) {
-        let Helper = bindHelperProperty(helper,target,propertyKey);
+        let Helper = bindHelperProperty(helper,target,propertyKey,...args);
         appendSuitBinding(target,new InsertAboveBindingMapDescriptor(s,Helper));
     }
 }
 
-export function insertBelow(s: SuitClass, helper: SuitHelperClass): PropertyDecorator {
+export function insertBelow(s: SuitClass, helper: SuitHelperClass,...args: any[]): PropertyDecorator {
     return function(target: any, propertyKey: string) {
-        let Helper = bindHelperProperty(helper,target,propertyKey);
+        let Helper = bindHelperProperty(helper,target,propertyKey,...args);
         appendSuitBinding(target,new InsertBelowBindingMapDescriptor(s,Helper));
     }
 }
 
-export function replaceWith(s: SuitClass, helper: SuitHelperClass): PropertyDecorator {
+export function replaceWith(s: SuitClass, helper: SuitHelperClass,...args: any[]): PropertyDecorator {
     return function(target: any, propertyKey: string) {
-        let Helper = bindHelperProperty(helper,target,propertyKey);
+        let Helper = bindHelperProperty(helper,target,propertyKey,...args);
         appendSuitBinding(target,new ReplaceBindingMapDescriptor(s,Helper));
     }
 }

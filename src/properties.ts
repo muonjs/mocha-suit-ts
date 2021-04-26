@@ -16,11 +16,11 @@ export function bindCallProperty(target: any, propertyKey: string): string {
     return propertyName;
 }
 
-export function bindHelperProperty(a: SuitHelperClass, target: any, propertyKey: string): SuitHelperClass {
+export function bindHelperProperty(a: SuitHelperClass, target: any, propertyKey: string, ...args: any[]): SuitHelperClass {
     @SuitHelper()
     class Helper extends a {
-        constructor(arg?: any) {
-            super(arg);
+        constructor() {
+            super(...args);
         }
     }
 
@@ -36,14 +36,13 @@ export function bindHelperProperty(a: SuitHelperClass, target: any, propertyKey:
             TestsProperties.set(suit,suitProperties);
         }
 
+        let propertyValue = suit[propertyKey];
         if (!suitProperties[propertyKey]) {
-            let propertyValue = suit[propertyKey];
-            suitProperties[propertyKey] = new Helper(propertyValue);
-            Object.defineProperty(suit,propertyKey,{
-                enumerable: true,
-                configurable: true,
-                get: () => suitProperties[propertyKey]
-            });
+            if (propertyValue instanceof a) {
+                suitProperties[propertyKey] = propertyValue;
+            } else {
+                suitProperties[propertyKey] = new Helper();
+            }
         }
 
         return suitProperties[propertyKey];
