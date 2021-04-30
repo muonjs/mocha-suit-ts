@@ -58,9 +58,10 @@ export function Suit(describe: string = "") {
         return class SuitClassFactory extends constructor implements SuitClass {
             constructor(...args: any[]) {
                 super(...args);
-                S.bindTo(this);
                 if (S == (this as any)[SUITPROPERTY]) {
-                    S();
+                    const subsuit = S.copy();
+                    subsuit.bindTo(this);
+                    subsuit();
                 }
             }
         };
@@ -94,21 +95,21 @@ export function SuitHelper() {
 
 export function SuitFactory(Suit: SuitClass, testSet: any) {
     Object.keys(testSet).forEach((describe) => {
-        let ParentS = Suit.prototype[SUITPROPERTY];
-        let S = ParentS.copy(`${ParentS.describe}: ${describe}`);
+        // let ParentS = Suit.prototype[SUITPROPERTY];
+        // let S = ParentS.copy(`${ParentS.describe}: ${describe}`);
+        //
+        // class FactoryClass extends Suit {
+        //     constructor(...args: any[]) {
+        //         super(...args);
+        //         S();
+        //     }
+        // }
+        //
+        // Object.defineProperty(FactoryClass.prototype,SUITPROPERTY, {
+        //     value: S, configurable: false, enumerable: false, writable: false
+        // });
 
-        class FactoryClass extends Suit {
-            constructor(...args: any[]) {
-                super(...args);
-                S();
-            }
-        }
-
-        Object.defineProperty(FactoryClass.prototype,SUITPROPERTY, {
-            value: S, configurable: false, enumerable: false, writable: false
-        });
-
-        new FactoryClass(testSet[describe]);
+        new Suit(testSet[describe]);
     });
 }
 

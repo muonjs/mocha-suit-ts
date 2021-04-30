@@ -55,7 +55,7 @@ export function boundPropertyCheck(target: any, S: any) {
     if (boundPropertyList) {
         let parentS = S.parent;
         while (parentS) {
-            let parentPropertyList = SuitPropertyBindingList.get(parentS);
+            let parentPropertyList = SuitPropertyBindingList.get(parentS) || [];
             let intersection = parentPropertyList.find((el: string) => {
                 return boundPropertyList.indexOf(el) !== -1;
             });
