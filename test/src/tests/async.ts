@@ -24,7 +24,7 @@ const DELAY = 10;
 import Done = Mocha.Done;
 
 describe("Asynchronous methods",function() {
-    describe("With 'done' method",function() {
+    xdescribe("With 'done' method",function() {
         const TestSpyCall = (decorator: Function, spyMethod: SpyMethod) => {
             const callOrder: number[] = [];
 

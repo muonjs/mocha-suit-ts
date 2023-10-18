@@ -1,4 +1,5 @@
 export const SUITPROPERTY = "__SUIT__";
+export const SUITDESCRIBEPROPERTY = "__SUIT__DESCRIBE__";
 export const SUITHELPERPROPERTY = "__SUIT_HELPER__";
 
 const MochaSuit = require("mocha-suit");
@@ -50,7 +51,7 @@ export function Suit(describe: string = "") {
         boundPropertyCheck(constructor.prototype, S);
 
         Object.defineProperty(constructor.prototype,SUITPROPERTY, {
-            value: S, configurable: false, enumerable: false, writable: false
+            value: S, configurable: true, enumerable: false, writable: false
         });
 
         applyBindings(constructor.prototype,S);
@@ -59,7 +60,11 @@ export function Suit(describe: string = "") {
             constructor(...args: any[]) {
                 super(...args);
                 if (S == (this as any)[SUITPROPERTY]) {
-                    const subsuit = S.copy();
+                    let caseDescribe = describe;
+                    if ((this as any)[SUITDESCRIBEPROPERTY]) {
+                        caseDescribe += `: ${(this as any)[SUITDESCRIBEPROPERTY]}`;
+                    }
+                    const subsuit = S.copy(caseDescribe);
                     subsuit.bindTo(this);
                     subsuit();
                 }
@@ -94,22 +99,14 @@ export function SuitHelper() {
 }
 
 export function SuitFactory(Suit: SuitClass, testSet: any) {
-    Object.keys(testSet).forEach((describe) => {
-        // let ParentS = Suit.prototype[SUITPROPERTY];
-        // let S = ParentS.copy(`${ParentS.describe}: ${describe}`);
-        //
-        // class FactoryClass extends Suit {
-        //     constructor(...args: any[]) {
-        //         super(...args);
-        //         S();
-        //     }
-        // }
-        //
-        // Object.defineProperty(FactoryClass.prototype,SUITPROPERTY, {
-        //     value: S, configurable: false, enumerable: false, writable: false
-        // });
-
+    Object.keys(testSet).forEach((describe) => {        
+        Object.defineProperty(Suit.prototype,SUITDESCRIBEPROPERTY, {
+            value: describe, configurable: true, enumerable: false, writable: false
+        });
         new Suit(testSet[describe]);
+        Object.defineProperty(Suit.prototype,SUITDESCRIBEPROPERTY, {
+            value: '', configurable: true, enumerable: false, writable: false
+        });
     });
 }
 

@@ -6,9 +6,9 @@
     "noImplicitReturns": false,
     "noImplicitThis": true,
     "inlineSourceMap": true,
-    "lib": ["es2015"],
+    "lib": [],
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "experimentalDecorators": true
   },
   "include":[
