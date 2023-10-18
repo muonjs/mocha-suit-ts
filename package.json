@@ -1,6 +1,6 @@
 {
   "name": "mocha-suit-ts",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "TypeScript wrapper for MochaSuit package",
   "main": "index.js",
   "scripts": {
@@ -22,11 +22,12 @@
     "@types/underscore": "^1.11.2",
     "bluebird": "^3.5.0",
     "expect.js": "^0.3.1",
-    "mocha": "^7.1.2",
-    "mocha-suit-ts": "file://.",
+    "mocha": "^7.1.2",    
     "should": "^13.2.3",
     "sinon": "^9.2.4",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "typescript": "4.6.2",
+    "mocha-suit-ts": "file:."
   },
   "repository": {
     "type": "git",
